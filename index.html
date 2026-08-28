@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Disaster Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>🚨 Smart Disaster Management</h1>
+        <p>Emergency Alert and Response System</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#sos">SOS</a>
+        <a href="#alerts">Alerts</a>
+        <a href="#shelters">Shelters</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="home">
+        <section class="hero">
+            <h2>Stay Safe. Stay Alert.</h2>
+            <p>
+                Get emergency alerts, send SOS requests,
+                and find nearby safe shelters.
+            </p>
+            <label for="disasterType"><b>Select Disaster Type:</b></label>
+
+<select id="disasterType">
+    <option value="Flood">🌊 Flood</option>
+    <option value="Fire">🔥 Fire</option>
+    <option value="Earthquake">🌍 Earthquake</option>
+    <option value="Cyclone">🌀 Cyclone</option>
+    <option value="Virus">🦠 Virus</option>
+</select>
+
+<br><br>
+<label for="location"><b>Enter Your Location:</b></label>
+<br>
+<input 
+    type="text" 
+    id="location" 
+    placeholder="Enter your location"
+>
+<br><br>
+<button type="button" onclick="getCurrentLocation()">
+    📍 Get Current Location
+</button>
+
+
+<br><br>
+<label for="userName"><b>Your Name:</b></label>
+<br>
+<input type="text" id="userName" placeholder="Enter your name">
+
+<br><br>
+<label for="contact"><b>Emergency Contact Number:</b></label>
+<br>
+<input 
+    type="tel" 
+    id="contact" 
+    placeholder="Enter emergency contact number"
+>
+
+<br><br>
+<label for="description"><b>Emergency Description:</b></label>
+<br>
+<textarea 
+    id="description" 
+    placeholder="Describe the emergency..."
+    rows="4"
+></textarea>
+
+<br><br>
+
+            <button onclick="sendSOS()">🆘 SEND SOS</button>
+        </section>
+
+        <!-- Alerts -->
+        <section id="alerts" class="card">
+            <h2>⚠️ Disaster Alerts</h2>
+            <p id="alertMessage">No active emergency alerts.</p>
+        </section>
+        <!-- SOS History -->
+<section class="card">
+    <h2>📋 SOS Request History</h2>
+    <ul id="historyList">
+        <li>No SOS requests yet.</li>
+    </ul>
+    <br>
+    <button onclick="clearHistory()">🗑️ Clear History</button>
+</section>
+
+        <!-- Shelters -->
+        <section id="shelters" class="card">
+            <h2>🏠 Safe Shelters</h2>
+            <ul>
+                <li>Government Higher Secondary School</li>
+                <li>Community Hall</li>
+                <li>District Relief Center</li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 Smart Disaster Management System</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
