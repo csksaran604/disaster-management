@@ -2,39 +2,59 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Smart Disaster Management</title>
 
-    <link rel="stylesheet"
-          href="style.css">
+    <!-- CSS -->
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
-    <!-- Leaflet Map CSS -->
-    <link rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
 </head>
 
 
 <body>
 
+
+    <!-- ========================= -->
     <!-- HEADER -->
+    <!-- ========================= -->
+
     <header class="top-header">
 
         <div class="header-content">
 
             <div class="brand">
-                <h1>🚨 Smart Disaster Management</h1>
+
+                <h1>
+                    🚨 Smart Disaster Management
+                </h1>
 
                 <p>
                     Emergency Alert & Response System
                 </p>
+
             </div>
 
+
             <div class="system-status">
+
                 🟢 System Active
+
             </div>
 
         </div>
@@ -42,29 +62,53 @@
     </header>
 
 
+
+    <!-- ========================= -->
     <!-- NAVIGATION -->
+    <!-- ========================= -->
+
     <nav>
 
-        <a href="#home">🏠 Home</a>
+        <a href="#home">
+            🏠 Home
+        </a>
 
-        <a href="#sos">🆘 SOS</a>
+        <a href="#sos">
+            🆘 SOS
+        </a>
 
-        <a href="#mapSection">🗺️ Live Map</a>
+        <a href="#mapSection">
+            🗺️ Live Map
+        </a>
 
-        <a href="#alerts">⚠️ Alerts</a>
+        <a href="#alerts">
+            ⚠️ Alerts
+        </a>
 
-        <a href="#shelters">🏠 Shelters</a>
+        <a href="#shelters">
+            🏠 Shelters
+        </a>
 
     </nav>
 
 
+
+    <!-- ========================= -->
     <!-- MAIN -->
+    <!-- ========================= -->
+
     <main id="home">
 
 
-        <!-- SOS -->
-        <section id="sos"
-                 class="hero">
+        <!-- ========================= -->
+        <!-- SOS SECTION -->
+        <!-- ========================= -->
+
+        <section
+            id="sos"
+            class="hero"
+        >
+
 
             <div class="section-heading">
 
@@ -72,25 +116,36 @@
                     🆘
                 </div>
 
+
                 <div>
-                    <h2>Emergency SOS</h2>
+
+                    <h2>
+                        Emergency SOS
+                    </h2>
 
                     <p>
                         Send your emergency request quickly
                     </p>
+
                 </div>
 
             </div>
 
 
+
             <div class="form-container">
 
+
                 <!-- DISASTER TYPE -->
+
                 <div class="form-group">
 
                     <label for="disasterType">
+
                         ⚠️ Disaster Type
+
                     </label>
+
 
                     <select id="disasterType">
 
@@ -119,12 +174,17 @@
                 </div>
 
 
+
                 <!-- SEVERITY -->
+
                 <div class="form-group">
 
                     <label for="severity">
+
                         🚦 Emergency Severity
+
                     </label>
+
 
                     <select id="severity">
 
@@ -132,7 +192,10 @@
                             🟢 Low
                         </option>
 
-                        <option value="Medium" selected>
+                        <option
+                            value="Medium"
+                            selected
+                        >
                             🟡 Medium
                         </option>
 
@@ -145,12 +208,17 @@
                 </div>
 
 
+
                 <!-- LOCATION -->
+
                 <div class="form-group">
 
                     <label for="location">
+
                         📍 Your Location
+
                     </label>
+
 
                     <input
                         type="text"
@@ -159,11 +227,13 @@
                         readonly
                     >
 
+
                     <button
                         type="button"
                         id="locationBtn"
                         class="location-button"
-                        onclick="getCurrentLocation()">
+                        onclick="getCurrentLocation()"
+                    >
 
                         📍 Get Current Location
 
@@ -172,12 +242,17 @@
                 </div>
 
 
+
                 <!-- NAME -->
+
                 <div class="form-group">
 
                     <label for="userName">
+
                         👤 Your Name
+
                     </label>
+
 
                     <input
                         type="text"
@@ -188,12 +263,17 @@
                 </div>
 
 
+
                 <!-- CONTACT -->
+
                 <div class="form-group">
 
                     <label for="contact">
+
                         📞 Emergency Contact
+
                     </label>
+
 
                     <input
                         type="tel"
@@ -204,12 +284,17 @@
                 </div>
 
 
+
                 <!-- DESCRIPTION -->
+
                 <div class="form-group">
 
                     <label for="description">
+
                         📝 Emergency Description
+
                     </label>
+
 
                     <textarea
                         id="description"
@@ -220,33 +305,47 @@
                 </div>
 
 
+
                 <!-- SOS BUTTON -->
+
                 <button
                     type="button"
                     id="sosBtn"
                     class="sos-button"
-                    onclick="sendSOS()">
+                    onclick="sendSOS()"
+                >
 
                     🆘 SEND SOS
 
                 </button>
 
+
                 <p id="statusMessage"></p>
+
 
             </div>
 
         </section>
 
 
+
+        <!-- ========================= -->
         <!-- LIVE MAP -->
-        <section id="mapSection"
-                 class="card">
+        <!-- ========================= -->
+
+        <section
+            id="mapSection"
+            class="card"
+        >
+
 
             <div class="card-title">
+
 
                 <div class="card-icon">
                     🗺️
                 </div>
+
 
                 <div>
 
@@ -260,44 +359,62 @@
 
                 </div>
 
+
             </div>
 
 
+
             <!-- MAP -->
+
             <div id="map"></div>
 
 
-            <!-- LOCATION BUTTON -->
+
+            <!-- SHOW LOCATION -->
+
             <button
                 type="button"
                 class="location-button"
-                onclick="showLiveLocation()">
+                onclick="showLiveLocation()"
+            >
 
                 📍 Show My Location
 
             </button>
 
 
-            <!-- STATUS -->
-            <p id="mapStatus"
-               style="margin-top:12px;">
+
+            <p
+                id="mapStatus"
+                style="margin-top:12px;"
+            >
 
                 📍 Click "Show My Location" to view your location.
 
             </p>
 
+
         </section>
 
 
+
+        <!-- ========================= -->
         <!-- ALERTS -->
-        <section id="alerts"
-                 class="card">
+        <!-- ========================= -->
+
+        <section
+            id="alerts"
+            class="card"
+        >
+
 
             <div class="card-title">
+
 
                 <div class="card-icon">
                     ⚠️
                 </div>
+
 
                 <div>
 
@@ -311,14 +428,18 @@
 
                 </div>
 
+
             </div>
+
 
 
             <div class="alert-box">
 
+
                 <div class="alert-icon">
                     ℹ️
                 </div>
+
 
                 <div>
 
@@ -326,25 +447,37 @@
                         No Active Emergency
                     </strong>
 
+
                     <p id="alertMessage">
+
                         No active emergency alerts.
+
                     </p>
 
                 </div>
 
+
             </div>
+
 
         </section>
 
 
+
+        <!-- ========================= -->
         <!-- SOS HISTORY -->
+        <!-- ========================= -->
+
         <section class="card">
 
+
             <div class="card-title">
+
 
                 <div class="card-icon">
                     📋
                 </div>
+
 
                 <div>
 
@@ -358,7 +491,9 @@
 
                 </div>
 
+
             </div>
+
 
 
             <ul id="historyList">
@@ -370,28 +505,40 @@
             </ul>
 
 
+
             <button
                 type="button"
                 id="clearHistoryBtn"
                 class="clear-button"
-                onclick="clearHistory()">
+                onclick="clearHistory()"
+            >
 
                 🗑️ Clear History
 
             </button>
 
+
         </section>
 
 
+
+        <!-- ========================= -->
         <!-- SAFE SHELTERS -->
-        <section id="shelters"
-                 class="card">
+        <!-- ========================= -->
+
+        <section
+            id="shelters"
+            class="card"
+        >
+
 
             <div class="card-title">
+
 
                 <div class="card-icon">
                     🏠
                 </div>
+
 
                 <div>
 
@@ -405,635 +552,249 @@
 
                 </div>
 
+
             </div>
+
 
 
             <!-- SHELTER SELECT -->
+
             <div class="form-group">
 
+
                 <label for="shelterSelect">
+
                     🏠 Select Safe Shelter
+
                 </label>
+
 
                 <select
                     id="shelterSelect"
-                    onchange="showSelectedShelter()">
+                    onchange="showSelectedShelter()"
+                >
+
 
                     <option value="">
+
                         -- Select a Shelter --
+
                     </option>
+
 
                     <option value="school">
+
                         🏫 Government Higher Secondary School
+
                     </option>
+
 
                     <option value="community">
+
                         🏢 Community Hall
+
                     </option>
+
 
                     <option value="relief">
+
                         🏥 District Relief Center
+
                     </option>
 
+
                 </select>
+
 
             </div>
 
 
+
             <!-- SHELTER INFO -->
-            <div id="shelterInfo"
-                 class="distance-box">
+
+            <div
+                id="shelterInfo"
+                class="distance-box"
+            >
 
                 <p>
+
                     📍 Show your location first,
                     then select a shelter.
+
                 </p>
 
             </div>
 
 
+
             <!-- SHELTER CARDS -->
+
             <div class="shelter-grid">
 
 
+                <!-- SCHOOL -->
+
                 <div class="shelter-card">
 
+
                     <div class="shelter-icon">
+
                         🏫
+
                     </div>
+
 
                     <div>
 
                         <h3>
+
                             Government Higher Secondary School
+
                         </h3>
 
+
                         <p class="available">
+
                             🟢 Available
+
                         </p>
 
                     </div>
 
+
                 </div>
 
 
+
+                <!-- COMMUNITY -->
+
                 <div class="shelter-card">
 
+
                     <div class="shelter-icon">
+
                         🏢
+
                     </div>
+
 
                     <div>
 
                         <h3>
+
                             Community Hall
+
                         </h3>
 
+
                         <p class="available">
+
                             🟢 Available
+
                         </p>
 
                     </div>
 
+
                 </div>
 
+
+
+                <!-- RELIEF CENTER -->
 
                 <div class="shelter-card">
 
+
                     <div class="shelter-icon">
+
                         🏥
+
                     </div>
+
 
                     <div>
 
                         <h3>
+
                             District Relief Center
+
                         </h3>
 
+
                         <p class="available">
+
                             🟢 Available
+
                         </p>
 
                     </div>
 
+
                 </div>
+
 
             </div>
 
+
         </section>
+
 
     </main>
 
 
+
+    <!-- ========================= -->
     <!-- FOOTER -->
+    <!-- ========================= -->
+
     <footer>
 
+
         <h3>
+
             🚨 Smart Disaster Management
+
         </h3>
 
+
         <p>
+
             Stay Safe • Stay Alert • Stay Prepared
+
         </p>
 
+
         <small>
+
             © 2026 Smart Disaster Management System
+
         </small>
+
 
     </footer>
 
 
-    <!-- LEAFLET -->
-    <script
-        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-    </script>
+
+    <!-- ========================= -->
+    <!-- LEAFLET JAVASCRIPT -->
+    <!-- IMPORTANT: LOAD FIRST -->
+    <!-- ========================= -->
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 
-    <!-- FIREBASE + SOS -->
+
+    <!-- ========================= -->
+    <!-- MAIN JAVASCRIPT -->
+    <!-- MAP + FIREBASE + SOS -->
+    <!-- ========================= -->
+
     <script
         type="module"
-        src="script.js">
-    </script>
+        src="script.js"
+    ></script>
 
-
-    <!-- MAP CODE -->
-    <script>
-
-        let map;
-
-        let userMarker = null;
-
-        let selectedShelterMarker = null;
-
-        let routeLine = null;
-
-
-        // =============================
-        // INITIALIZE MAP
-        // =============================
-
-        function initializeMap() {
-
-            map = L.map("map").setView(
-                [11.3410, 77.7172],
-                10
-            );
-
-
-            L.tileLayer(
-                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                {
-                    maxZoom: 19,
-
-                    attribution:
-                        "&copy; OpenStreetMap contributors"
-                }
-            ).addTo(map);
-
-        }
-
-
-        // =============================
-        // SHOW MY LOCATION
-        // =============================
-
-        function showLiveLocation() {
-
-            if (!navigator.geolocation) {
-
-                alert(
-                    "⚠️ Your browser does not support GPS."
-                );
-
-                return;
-            }
-
-
-            const mapStatus =
-                document.getElementById("mapStatus");
-
-
-            mapStatus.textContent =
-                "📍 Getting your current location...";
-
-
-            navigator.geolocation.getCurrentPosition(
-
-                function(position) {
-
-                    const latitude =
-                        position.coords.latitude;
-
-                    const longitude =
-                        position.coords.longitude;
-
-
-                    const userLocation = [
-                        latitude,
-                        longitude
-                    ];
-
-
-                    map.setView(
-                        userLocation,
-                        14
-                    );
-
-
-                    if (userMarker) {
-
-                        map.removeLayer(
-                            userMarker
-                        );
-
-                    }
-
-
-                    userMarker =
-                        L.marker(
-                            userLocation
-                        ).addTo(map);
-
-
-                    userMarker
-                        .bindPopup(
-
-                            "<b>📍 My Location</b><br>" +
-
-                            "Latitude: " +
-                            latitude.toFixed(6) +
-
-                            "<br>" +
-
-                            "Longitude: " +
-                            longitude.toFixed(6)
-
-                        )
-                        .openPopup();
-
-
-                    mapStatus.textContent =
-                        "✅ Your current location is shown on the map.";
-
-
-                    const locationInput =
-                        document.getElementById(
-                            "location"
-                        );
-
-
-                    if (locationInput) {
-
-                        locationInput.value =
-                            latitude.toFixed(6) +
-                            ", " +
-                            longitude.toFixed(6);
-
-                    }
-
-
-                    const shelterSelect =
-                        document.getElementById(
-                            "shelterSelect"
-                        );
-
-
-                    if (
-                        shelterSelect &&
-                        shelterSelect.value
-                    ) {
-
-                        showSelectedShelter();
-
-                    }
-
-                },
-
-
-                function(error) {
-
-                    console.error(
-                        "GPS Error:",
-                        error
-                    );
-
-
-                    mapStatus.textContent =
-                        "⚠️ Unable to get your location.";
-
-
-                    alert(
-                        "⚠️ Please allow location permission and try again."
-                    );
-
-                },
-
-
-                {
-
-                    enableHighAccuracy: true,
-
-                    timeout: 15000,
-
-                    maximumAge: 0
-
-                }
-
-            );
-
-        }
-
-
-        // =============================
-        // DEMO SHELTERS
-        // =============================
-
-        const verifiedShelters = {
-
-            school: {
-
-                name:
-                    "🏫 Government Higher Secondary School",
-
-                lat: 11.3410,
-
-                lng: 77.7172
-
-            },
-
-
-            community: {
-
-                name:
-                    "🏢 Community Hall",
-
-                lat: 11.3300,
-
-                lng: 77.7250
-
-            },
-
-
-            relief: {
-
-                name:
-                    "🏥 District Relief Center",
-
-                lat: 11.3500,
-
-                lng: 77.7050
-
-            }
-
-        };
-
-
-        // =============================
-        // SHOW SELECTED SHELTER
-        // =============================
-
-        function showSelectedShelter() {
-
-            const selected =
-                document.getElementById(
-                    "shelterSelect"
-                ).value;
-
-
-            const info =
-                document.getElementById(
-                    "shelterInfo"
-                );
-
-
-            if (!selected) {
-
-                info.innerHTML =
-                    "<p>📍 Select a shelter to view its location.</p>";
-
-                return;
-
-            }
-
-
-            if (!userMarker) {
-
-                info.innerHTML =
-                    "<p>⚠️ First click <b>Show My Location</b>.</p>";
-
-                return;
-
-            }
-
-
-            const shelter =
-                verifiedShelters[selected];
-
-
-            if (!shelter) {
-
-                info.innerHTML =
-                    "<p>⚠️ Shelter data unavailable.</p>";
-
-                return;
-
-            }
-
-
-            // USER POSITION
-
-            const userPosition =
-                userMarker.getLatLng();
-
-
-            // SHELTER POSITION
-
-            const shelterPosition =
-                L.latLng(
-                    shelter.lat,
-                    shelter.lng
-                );
-
-
-            // DISTANCE
-
-            const distanceInMeters =
-                userPosition.distanceTo(
-                    shelterPosition
-                );
-
-
-            const distanceInKm =
-                (
-                    distanceInMeters / 1000
-                ).toFixed(2);
-
-
-            // REMOVE OLD MARKER
-
-            if (selectedShelterMarker) {
-
-                map.removeLayer(
-                    selectedShelterMarker
-                );
-
-            }
-
-
-            // REMOVE OLD LINE
-
-            if (routeLine) {
-
-                map.removeLayer(
-                    routeLine
-                );
-
-            }
-
-
-            // SHELTER MARKER
-
-            selectedShelterMarker =
-                L.marker([
-
-                    shelter.lat,
-
-                    shelter.lng
-
-                ])
-                .addTo(map);
-
-
-            selectedShelterMarker
-                .bindPopup(
-
-                    "<b>" +
-                    shelter.name +
-                    "</b><br>" +
-
-                    "🏠 Demo Shelter<br>" +
-
-                    "📏 Distance: " +
-                    distanceInKm +
-                    " km"
-
-                )
-                .openPopup();
-
-
-            // LINE BETWEEN USER & SHELTER
-
-            routeLine =
-                L.polyline(
-
-                    [
-
-                        [
-                            userPosition.lat,
-
-                            userPosition.lng
-                        ],
-
-                        [
-                            shelter.lat,
-
-                            shelter.lng
-                        ]
-
-                    ],
-
-                    {
-                        weight: 4
-                    }
-
-                )
-                .addTo(map);
-
-
-            // FIT MAP
-
-            const bounds =
-                L.latLngBounds([
-
-                    userPosition,
-
-                    shelterPosition
-
-                ]);
-
-
-            map.fitBounds(
-
-                bounds,
-
-                {
-                    padding: [50, 50]
-                }
-
-            );
-
-
-            // INFO
-
-            info.innerHTML =
-
-                "<div class='distance-box'>" +
-
-                "<h3>" +
-                shelter.name +
-                "</h3>" +
-
-                "<p>📍 Your Location detected</p>" +
-
-                "<p>🏠 Shelter Location available</p>" +
-
-                "<p class='distance-text'>" +
-
-                "📏 Distance: " +
-
-                "<strong>" +
-
-                distanceInKm +
-
-                " km" +
-
-                "</strong>" +
-
-                "</p>" +
-
-                "</div>";
-
-        }
-
-
-        // =============================
-        // PAGE LOAD
-        // =============================
-
-        window.addEventListener(
-
-            "load",
-
-            function() {
-
-                initializeMap();
-
-            }
-
-        );
-
-
-        // =============================
-        // GLOBAL FUNCTIONS
-        // =============================
-
-        window.showLiveLocation =
-            showLiveLocation;
-
-        window.showSelectedShelter =
-            showSelectedShelter;
-
-    </script>
 
 </body>
 
