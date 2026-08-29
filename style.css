@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: Arial, sans-serif;
     background: #f4f7fb;
@@ -15,22 +19,39 @@ body {
    HEADER
 ========================= */
 
-header {
+.top-header {
     background: linear-gradient(135deg, #b71c1c, #e53935);
     color: white;
-    text-align: center;
-    padding: 40px 20px;
+    padding: 35px 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
-header h1 {
-    font-size: 36px;
-    margin-bottom: 8px;
+.header-content {
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
 }
 
-header p {
-    font-size: 17px;
+.brand h1 {
+    font-size: 34px;
+    margin-bottom: 5px;
+}
+
+.brand p {
+    font-size: 16px;
     opacity: 0.95;
+}
+
+.system-status {
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 10px 16px;
+    border-radius: 25px;
+    font-weight: bold;
+    white-space: nowrap;
 }
 
 
@@ -40,19 +61,20 @@ header p {
 
 nav {
     background: #17202a;
+    padding: 15px 10px;
     text-align: center;
-    padding: 16px 10px;
     position: sticky;
     top: 0;
     z-index: 100;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
 }
 
 nav a {
     color: white;
     text-decoration: none;
-    margin: 0 18px;
     font-weight: bold;
-    transition: 0.3s;
+    margin: 0 16px;
+    transition: 0.25s;
 }
 
 nav a:hover {
@@ -72,28 +94,43 @@ main {
 
 
 /* =========================
-   HERO / SOS SECTION
+   SOS HERO
 ========================= */
 
 .hero {
-    text-align: center;
-    padding: 45px 30px;
     background: white;
+    padding: 35px;
     border-radius: 18px;
-    margin-bottom: 30px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
-
-.hero h2 {
-    font-size: 34px;
-    margin-bottom: 12px;
-    color: #263238;
-}
-
-.hero p {
-    font-size: 18px;
     margin-bottom: 28px;
-    color: #607d8b;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border-top: 5px solid #e53935;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 28px;
+}
+
+.section-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 14px;
+    background: #ffebee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.section-heading h2 {
+    font-size: 28px;
+    margin-bottom: 3px;
+}
+
+.section-heading p {
+    color: #78909c;
 }
 
 
@@ -101,11 +138,18 @@ main {
    FORM
 ========================= */
 
+.form-container {
+    max-width: 650px;
+    margin: auto;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
 label {
     display: block;
-    text-align: left;
-    max-width: 600px;
-    margin: 16px auto 7px;
+    margin-bottom: 7px;
     font-size: 15px;
     font-weight: bold;
     color: #37474f;
@@ -115,14 +159,14 @@ input,
 select,
 textarea {
     width: 100%;
-    max-width: 600px;
     padding: 14px;
-    font-size: 16px;
     border: 1px solid #cfd8dc;
     border-radius: 10px;
     background: #fafafa;
-    transition: 0.3s;
-    font-family: inherit;
+    color: #263238;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    transition: 0.25s;
 }
 
 textarea {
@@ -135,13 +179,7 @@ textarea:focus {
     outline: none;
     border-color: #e53935;
     background: white;
-    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.12);
-}
-
-.hero select,
-.hero input,
-.hero textarea {
-    margin-top: 3px;
+    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.10);
 }
 
 
@@ -150,59 +188,49 @@ textarea:focus {
 ========================= */
 
 button {
-    background: linear-gradient(135deg, #d32f2f, #e53935);
-    color: white;
     border: none;
-    padding: 14px 28px;
-    font-size: 17px;
-    font-weight: bold;
-    border-radius: 10px;
     cursor: pointer;
-    transition: 0.25s;
-    box-shadow: 0 5px 12px rgba(211, 47, 47, 0.25);
-}
-
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(211, 47, 47, 0.3);
-}
-
-button:active {
-    transform: scale(0.97);
-}
-
-
-/* Location button */
-
-#locationBtn {
-    background: #1565c0;
-    box-shadow: 0 5px 12px rgba(21, 101, 192, 0.25);
-}
-
-#locationBtn:hover {
-    background: #0d47a1;
-}
-
-
-/* SOS button */
-
-#sosBtn {
-    width: min(100%, 600px);
-    margin-top: 12px;
-    padding: 18px;
-    font-size: 21px;
-    letter-spacing: 0.5px;
-}
-
-
-/* =========================
-   STATUS MESSAGE
-========================= */
-
-#statusMessage {
-    margin-top: 18px;
+    font-family: Arial, sans-serif;
     font-weight: bold;
-    color: #2e7d32;
+    transition: 0.25s;
+}
+
+.location-button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 13px;
+    background: #1565c0;
+    color: white;
+    border-radius: 10px;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(21, 101, 192, 0.20);
+}
+
+.location-button:hover {
+    background: #0d47a1;
+    transform: translateY(-1px);
+}
+
+.sos-button {
+    width: 100%;
+    padding: 17px;
+    margin-top: 5px;
+    background: linear-gradient(135deg, #c62828, #e53935);
+    color: white;
+    border-radius: 11px;
+    font-size: 20px;
+    box-shadow: 0 6px 15px rgba(211, 47, 47, 0.25);
+}
+
+.sos-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 9px 20px rgba(211, 47, 47, 0.30);
+}
+
+.sos-button:active,
+.location-button:active,
+.clear-button:active {
+    transform: scale(0.98);
 }
 
 
@@ -213,34 +241,64 @@ button:active {
 .card {
     background: white;
     padding: 28px;
-    margin-bottom: 25px;
     border-radius: 16px;
+    margin-bottom: 25px;
     box-shadow: 0 7px 22px rgba(0, 0, 0, 0.07);
 }
 
-.card h2 {
-    margin-bottom: 18px;
-    color: #263238;
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
 }
 
-.card ul {
-    padding-left: 25px;
+.card-icon {
+    width: 48px;
+    height: 48px;
+    background: #f5f5f5;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 23px;
 }
 
-.card li {
-    margin-bottom: 12px;
+.card-title h2 {
+    font-size: 23px;
+}
+
+.card-title p {
+    color: #78909c;
+    font-size: 14px;
 }
 
 
 /* =========================
-   ALERT MESSAGE
+   ALERT
 ========================= */
 
-#alertMessage {
-    padding: 15px;
+.alert-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 17px;
     background: #fff8e1;
     border-left: 5px solid #ffb300;
-    border-radius: 8px;
+    border-radius: 10px;
+}
+
+.alert-icon {
+    font-size: 23px;
+}
+
+.alert-box strong {
+    display: block;
+    margin-bottom: 3px;
+}
+
+.alert-box p {
+    color: #607d8b;
 }
 
 
@@ -254,23 +312,41 @@ button:active {
 }
 
 #historyList li {
-    background: #f5f7f9;
+    background: #f7f9fb;
     border-left: 5px solid #e53935;
     padding: 15px;
     margin-bottom: 12px;
-    border-radius: 8px;
+    border-radius: 9px;
 }
 
-
-/* History buttons */
+#historyList p {
+    margin-bottom: 5px;
+}
 
 #historyList button {
     padding: 7px 12px;
     margin: 6px 4px 0 0;
-    font-size: 13px;
     border-radius: 6px;
-    width: auto;
-    box-shadow: none;
+    font-size: 13px;
+    background: #eceff1;
+    color: #263238;
+}
+
+#historyList button:hover {
+    background: #cfd8dc;
+}
+
+.clear-button {
+    margin-top: 8px;
+    padding: 10px 16px;
+    background: #455a64;
+    color: white;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.clear-button:hover {
+    background: #263238;
 }
 
 
@@ -278,10 +354,52 @@ button:active {
    SHELTERS
 ========================= */
 
-#shelters li {
-    background: #f1f8e9;
-    padding: 10px;
-    border-radius: 7px;
+.shelter-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.shelter-card {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 18px;
+    background: #f8fafb;
+    border: 1px solid #e0e6e9;
+    border-radius: 12px;
+    transition: 0.25s;
+}
+
+.shelter-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 18px rgba(0, 0, 0, 0.08);
+}
+
+.shelter-icon {
+    font-size: 28px;
+}
+
+.shelter-card h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.available {
+    color: #2e7d32;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+/* =========================
+   STATUS MESSAGE
+========================= */
+
+#statusMessage {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
 }
 
 
@@ -293,39 +411,54 @@ footer {
     background: #17202a;
     color: white;
     text-align: center;
-    padding: 22px;
+    padding: 25px 15px;
     margin-top: 35px;
 }
 
+footer h3 {
+    margin-bottom: 5px;
+}
+
 footer p {
-    opacity: 0.85;
+    color: #cfd8dc;
+    margin-bottom: 5px;
+}
+
+footer small {
+    color: #90a4ae;
 }
 
 
 /* =========================
-   MOBILE RESPONSIVE
+   MOBILE
 ========================= */
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
 
-    header {
-        padding: 30px 15px;
+    .top-header {
+        padding: 28px 15px;
     }
 
-    header h1 {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .brand h1 {
         font-size: 27px;
     }
 
-    header p {
-        font-size: 15px;
+    .system-status {
+        font-size: 14px;
     }
 
     nav {
-        padding: 12px 5px;
+        white-space: nowrap;
+        overflow-x: auto;
     }
 
     nav a {
-        margin: 0 7px;
+        margin: 0 8px;
         font-size: 14px;
     }
 
@@ -333,21 +466,22 @@ footer p {
         padding: 20px 12px;
     }
 
-    .hero {
-        padding: 30px 16px;
+    .hero,
+    .card {
+        padding: 22px 16px;
         border-radius: 14px;
     }
 
-    .hero h2 {
-        font-size: 27px;
+    .section-heading {
+        align-items: flex-start;
     }
 
-    .hero p {
-        font-size: 16px;
+    .section-heading h2 {
+        font-size: 24px;
     }
 
-    .card {
-        padding: 20px 16px;
+    .shelter-grid {
+        grid-template-columns: 1fr;
     }
 
     input,
@@ -356,7 +490,7 @@ footer p {
         font-size: 15px;
     }
 
-    #sosBtn {
-        font-size: 19px;
+    .sos-button {
+        font-size: 18px;
     }
 }
