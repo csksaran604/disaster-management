@@ -15,13 +15,13 @@ import {
 // ===============================
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCOug6KwpFtoeXNVjOAZOUg1eWVu7npkcc",
-  authDomain: "disaster-management-96929.firebaseapp.com",
-  projectId: "disaster-management-96929",
-  storageBucket: "disaster-management-96929.firebasestorage.app",
-  messagingSenderId: "349356499578",
-  appId: "1:349356499578:web:7de4f7b871b0332c4391c3",
-  measurementId: "G-R85HX7MW6C"
+    apiKey: "AIzaSyCOug6KwpFtoeXNVjOAZOUg1eWVu7npkcc",
+    authDomain: "disaster-management-96929.firebaseapp.com",
+    projectId: "disaster-management-96929",
+    storageBucket: "disaster-management-96929.firebasestorage.app",
+    messagingSenderId: "349356499578",
+    appId: "1:349356499578:web:7de4f7b871b0332c4391c3",
+    measurementId: "G-R85HX7MW6C"
 };
 
 
@@ -107,11 +107,8 @@ async function sendSOS() {
             location: location,
             contact: contact,
             description: description,
-
             status: "Pending",
-
             dateTime: dateTime,
-
             createdAt: serverTimestamp()
 
         });
@@ -142,7 +139,6 @@ async function sendSOS() {
         const historyItem =
             document.createElement("li");
 
-
         const details =
             document.createElement("p");
 
@@ -159,7 +155,7 @@ async function sendSOS() {
 
 
         // ===============================
-        // Pending
+        // 🔴 Pending
         // ===============================
 
         const pendingBtn =
@@ -180,7 +176,7 @@ async function sendSOS() {
 
 
         // ===============================
-        // In Progress
+        // 🟡 In Progress
         // ===============================
 
         const progressBtn =
@@ -201,7 +197,7 @@ async function sendSOS() {
 
 
         // ===============================
-        // Resolved
+        // 🟢 Resolved
         // ===============================
 
         const resolvedBtn =
@@ -299,39 +295,153 @@ function getCurrentLocation() {
         document.getElementById("location");
 
 
-    if (navigator.geolocation) {
+    if (!navigator.geolocation) {
 
-        locationInput.value =
-            "Getting your location...";
+        alert(
+            "⚠️ Your browser does not support GPS location."
+        );
 
-
-        navigator.geolocation.getCurrentPosition(
-
-            async function (position) {
-
-                const latitude =
-                    position.coords.latitude;
-
-                const longitude =
-                    position.coords.longitude;
+        return;
+    }
 
 
-                try {
+    locationInput.value =
+        "📍 Getting your exact location...";
 
-                    const response =
-                        await fetch(
-                            "https://nominatim.openstreetmap.org/reverse?format=json&lat=" +
-                            latitude +
-                            "&lon=" +
-                            longitude
+
+    navigator.geolocation.getCurrentPosition(
+
+        async function (position) {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "https://nominatim.openstreetmap.org/reverse" +
+                        "?format=json" +
+                        "&lat=" + latitude +
+                        "&lon=" + longitude +
+                        "&zoom=18" +
+                        "&addressdetails=1"
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (data.address) {
+
+                    const address =
+                        data.address;
+
+
+                    // Street / Road
+                    const road =
+                        address.road || "";
+
+
+                    // House number
+                    const houseNumber =
+                        address.house_number || "";
+
+
+                    // Area
+                    const neighbourhood =
+                        address.neighbourhood ||
+                        address.suburb ||
+                        address.village ||
+                        "";
+
+
+                    // City
+                    const city =
+                        address.city ||
+                        address.town ||
+                        address.municipality ||
+                        "";
+
+
+                    // District
+                    const district =
+                        address.county || "";
+
+
+                    // State
+                    const state =
+                        address.state || "";
+
+
+                    // Country
+                    const country =
+                        address.country || "";
+
+
+                    const parts = [];
+
+
+                    if (houseNumber && road) {
+
+                        parts.push(
+                            houseNumber + ", " + road
                         );
 
+                    } else if (road) {
 
-                    const data =
-                        await response.json();
+                        parts.push(road);
+
+                    }
 
 
-                    if (data.display_name) {
+                    if (neighbourhood) {
+
+                        parts.push(neighbourhood);
+
+                    }
+
+
+                    if (city) {
+
+                        parts.push(city);
+
+                    }
+
+
+                    if (district &&
+                        district !== city) {
+
+                        parts.push(district);
+
+                    }
+
+
+                    if (state) {
+
+                        parts.push(state);
+
+                    }
+
+
+                    if (country) {
+
+                        parts.push(country);
+
+                    }
+
+
+                    if (parts.length > 0) {
+
+                        locationInput.value =
+                            parts.join(", ");
+
+                    } else if (data.display_name) {
 
                         locationInput.value =
                             data.display_name;
@@ -339,42 +449,98 @@ function getCurrentLocation() {
                     } else {
 
                         locationInput.value =
-                            "Latitude: " + latitude +
-                            ", Longitude: " + longitude;
+                            "Latitude: " +
+                            latitude +
+                            ", Longitude: " +
+                            longitude;
 
                     }
 
 
-                } catch (error) {
+                } else if (data.display_name) {
 
                     locationInput.value =
-                        "Latitude: " + latitude +
-                        ", Longitude: " + longitude;
+                        data.display_name;
+
+                } else {
+
+                    locationInput.value =
+                        "Latitude: " +
+                        latitude +
+                        ", Longitude: " +
+                        longitude;
 
                 }
 
-            },
+            } catch (error) {
 
-
-            function () {
-
-                alert(
-                    "⚠️ Unable to get your location. Please allow location permission."
+                console.error(
+                    "Address lookup error:",
+                    error
                 );
 
-                locationInput.value = "";
+
+                locationInput.value =
+                    "Latitude: " +
+                    latitude +
+                    ", Longitude: " +
+                    longitude;
 
             }
 
-        );
+        },
 
-    } else {
 
-        alert(
-            "⚠️ Geolocation is not supported by your browser."
-        );
+        function (error) {
 
-    }
+            console.error(
+                "GPS Error:",
+                error
+            );
+
+
+            if (error.code === 1) {
+
+                alert(
+                    "⚠️ Location permission denied.\n\n" +
+                    "Please allow location access and try again."
+                );
+
+            } else if (error.code === 2) {
+
+                alert(
+                    "⚠️ Your location could not be determined.\n" +
+                    "Please check your GPS."
+                );
+
+            } else if (error.code === 3) {
+
+                alert(
+                    "⚠️ Location request timed out.\n" +
+                    "Please try again."
+                );
+
+            } else {
+
+                alert(
+                    "⚠️ Unable to get your location."
+                );
+
+            }
+
+
+            locationInput.value = "";
+
+        },
+
+
+        {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
+        }
+
+    );
 
 }
 
@@ -383,6 +549,11 @@ function getCurrentLocation() {
 // 🌐 MAKE FUNCTIONS AVAILABLE
 // ===============================
 
-window.sendSOS = sendSOS;
-window.clearHistory = clearHistory;
-window.getCurrentLocation = getCurrentLocation;
+window.sendSOS =
+    sendSOS;
+
+window.clearHistory =
+    clearHistory;
+
+window.getCurrentLocation =
+    getCurrentLocation;
