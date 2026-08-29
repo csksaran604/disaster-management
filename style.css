@@ -6,85 +6,221 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    color: #333;
+    background: #f4f7fb;
+    color: #263238;
+    line-height: 1.6;
 }
 
+/* =========================
+   HEADER
+========================= */
+
 header {
-    background: #d32f2f;
+    background: linear-gradient(135deg, #b71c1c, #e53935);
     color: white;
     text-align: center;
-    padding: 25px;
+    padding: 40px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 header h1 {
+    font-size: 36px;
     margin-bottom: 8px;
 }
 
+header p {
+    font-size: 17px;
+    opacity: 0.95;
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
 nav {
-    background: #222;
+    background: #17202a;
     text-align: center;
-    padding: 15px;
+    padding: 16px 10px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 nav a {
     color: white;
     text-decoration: none;
-    margin: 0 15px;
+    margin: 0 18px;
     font-weight: bold;
+    transition: 0.3s;
 }
 
 nav a:hover {
-    color: #ffcc00;
+    color: #ffca28;
 }
 
+
+/* =========================
+   MAIN
+========================= */
+
 main {
-    max-width: 900px;
+    max-width: 1000px;
     margin: auto;
-    padding: 30px 20px;
+    padding: 35px 20px;
 }
+
+
+/* =========================
+   HERO / SOS SECTION
+========================= */
 
 .hero {
     text-align: center;
-    padding: 50px 20px;
+    padding: 45px 30px;
     background: white;
-    border-radius: 10px;
-    margin-bottom: 25px;
+    border-radius: 18px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
 .hero h2 {
-    font-size: 32px;
-    margin-bottom: 15px;
+    font-size: 34px;
+    margin-bottom: 12px;
+    color: #263238;
 }
 
 .hero p {
     font-size: 18px;
-    margin-bottom: 25px;
+    margin-bottom: 28px;
+    color: #607d8b;
 }
 
+
+/* =========================
+   FORM
+========================= */
+
+label {
+    display: block;
+    text-align: left;
+    max-width: 600px;
+    margin: 16px auto 7px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #37474f;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    max-width: 600px;
+    padding: 14px;
+    font-size: 16px;
+    border: 1px solid #cfd8dc;
+    border-radius: 10px;
+    background: #fafafa;
+    transition: 0.3s;
+    font-family: inherit;
+}
+
+textarea {
+    resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #e53935;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.12);
+}
+
+.hero select,
+.hero input,
+.hero textarea {
+    margin-top: 3px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
 button {
-    background: #d32f2f;
+    background: linear-gradient(135deg, #d32f2f, #e53935);
     color: white;
     border: none;
-    padding: 15px 30px;
-    font-size: 18px;
-    border-radius: 8px;
+    padding: 14px 28px;
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 10px;
     cursor: pointer;
+    transition: 0.25s;
+    box-shadow: 0 5px 12px rgba(211, 47, 47, 0.25);
 }
 
 button:hover {
-    background: #b71c1c;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(211, 47, 47, 0.3);
 }
+
+button:active {
+    transform: scale(0.97);
+}
+
+
+/* Location button */
+
+#locationBtn {
+    background: #1565c0;
+    box-shadow: 0 5px 12px rgba(21, 101, 192, 0.25);
+}
+
+#locationBtn:hover {
+    background: #0d47a1;
+}
+
+
+/* SOS button */
+
+#sosBtn {
+    width: min(100%, 600px);
+    margin-top: 12px;
+    padding: 18px;
+    font-size: 21px;
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================
+   STATUS MESSAGE
+========================= */
+
+#statusMessage {
+    margin-top: 18px;
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+
+/* =========================
+   CARDS
+========================= */
 
 .card {
     background: white;
-    padding: 25px;
-    margin-bottom: 20px;
-    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 25px;
+    border-radius: 16px;
+    box-shadow: 0 7px 22px rgba(0, 0, 0, 0.07);
 }
 
 .card h2 {
-    margin-bottom: 15px;
+    margin-bottom: 18px;
+    color: #263238;
 }
 
 .card ul {
@@ -92,48 +228,135 @@ button:hover {
 }
 
 .card li {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
-footer {
-    background: #222;
-    color: white;
-    text-align: center;
+
+/* =========================
+   ALERT MESSAGE
+========================= */
+
+#alertMessage {
     padding: 15px;
-    margin-top: 30px;
-}/* Form Design */
-
-label {
-    display: inline-block;
-    margin-bottom: 8px;
-    font-size: 16px;
-}
-
-input,
-select {
-    width: 100%;
-    max-width: 400px;
-    padding: 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
+    background: #fff8e1;
+    border-left: 5px solid #ffb300;
     border-radius: 8px;
 }
 
-input:focus,
-select:focus {
-    outline: none;
-    border-color: #d32f2f;
+
+/* =========================
+   SOS HISTORY
+========================= */
+
+#historyList {
+    list-style: none;
+    padding: 0;
 }
 
-.hero select,
-.hero input {
-    margin-top: 5px;
-}/* SOS Status Buttons - Small Size */
+#historyList li {
+    background: #f5f7f9;
+    border-left: 5px solid #e53935;
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+}
+
+
+/* History buttons */
 
 #historyList button {
-    padding: 6px 12px;
-    margin: 5px 4px;
-    font-size: 14px;
+    padding: 7px 12px;
+    margin: 6px 4px 0 0;
+    font-size: 13px;
     border-radius: 6px;
     width: auto;
+    box-shadow: none;
+}
+
+
+/* =========================
+   SHELTERS
+========================= */
+
+#shelters li {
+    background: #f1f8e9;
+    padding: 10px;
+    border-radius: 7px;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    background: #17202a;
+    color: white;
+    text-align: center;
+    padding: 22px;
+    margin-top: 35px;
+}
+
+footer p {
+    opacity: 0.85;
+}
+
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 30px 15px;
+    }
+
+    header h1 {
+        font-size: 27px;
+    }
+
+    header p {
+        font-size: 15px;
+    }
+
+    nav {
+        padding: 12px 5px;
+    }
+
+    nav a {
+        margin: 0 7px;
+        font-size: 14px;
+    }
+
+    main {
+        padding: 20px 12px;
+    }
+
+    .hero {
+        padding: 30px 16px;
+        border-radius: 14px;
+    }
+
+    .hero h2 {
+        font-size: 27px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .card {
+        padding: 20px 16px;
+    }
+
+    input,
+    select,
+    textarea {
+        font-size: 15px;
+    }
+
+    #sosBtn {
+        font-size: 19px;
+    }
 }
