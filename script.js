@@ -24,44 +24,94 @@ const firebaseConfig = {
     measurementId: "G-R85HX7MW6C"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+
+// =====================================
+// 🔥 INITIALIZE FIREBASE
+// =====================================
+
+const app =
+    initializeApp(firebaseConfig);
+
+const db =
+    getFirestore(app);
 
 
 // =====================================
 // 🏠 DEMO SHELTERS
 // =====================================
+// Testing locations only.
+// Replace with verified locations later.
 
 const verifiedShelters = [
-    {
-        id: "demo-school",
-        name: "Government Higher Secondary School",
-        state: "Tamil Nadu",
-        district: "Erode",
-        latitude: 11.3410,
-        longitude: 77.7172,
-        available: true
-    },
 
     {
-        id: "demo-community",
-        name: "Community Hall",
-        state: "Tamil Nadu",
-        district: "Erode",
-        latitude: 11.3300,
-        longitude: 77.7250,
-        available: true
+        id: "school",
+
+        name:
+            "Government Higher Secondary School",
+
+        state:
+            "Tamil Nadu",
+
+        district:
+            "Erode",
+
+        latitude:
+            11.3410,
+
+        longitude:
+            77.7172,
+
+        available:
+            true
     },
 
+
     {
-        id: "demo-relief",
-        name: "District Relief Center",
-        state: "Tamil Nadu",
-        district: "Erode",
-        latitude: 11.3500,
-        longitude: 77.7050,
-        available: true
+        id: "community",
+
+        name:
+            "Community Hall",
+
+        state:
+            "Tamil Nadu",
+
+        district:
+            "Erode",
+
+        latitude:
+            11.3300,
+
+        longitude:
+            77.7250,
+
+        available:
+            true
+    },
+
+
+    {
+        id: "relief",
+
+        name:
+            "District Relief Center",
+
+        state:
+            "Tamil Nadu",
+
+        district:
+            "Erode",
+
+        latitude:
+            11.3500,
+
+        longitude:
+            77.7050,
+
+        available:
+            true
     }
+
 ];
 
 
@@ -70,10 +120,18 @@ const verifiedShelters = [
 // =====================================
 
 let map = null;
+
 let userMarker = null;
+
 let shelterMarkers = [];
+
 let selectedShelterMarker = null;
+
 let routeLine = null;
+
+let currentLatitude = null;
+
+let currentLongitude = null;
 
 
 // =====================================
@@ -85,27 +143,56 @@ function initializeMap() {
     const mapElement =
         document.getElementById("map");
 
+
     if (!mapElement) {
+
+        console.error(
+            "Map element not found."
+        );
+
         return;
     }
 
-    if (map !== null) {
+
+    // Prevent double initialization
+
+    if (map) {
+
         return;
     }
 
-    map = L.map("map").setView(
-        [11.3410, 77.7172],
-        10
-    );
+
+    map =
+        L.map("map").setView(
+
+            [11.3410, 77.7172],
+
+            10
+
+        );
+
 
     L.tileLayer(
+
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
         {
-            maxZoom: 19,
+
+            maxZoom:
+                19,
+
             attribution:
                 "&copy; OpenStreetMap contributors"
+
         }
+
     ).addTo(map);
+
+
+    console.log(
+        "Map initialized successfully."
+    );
+
 }
 
 
@@ -116,91 +203,206 @@ function initializeMap() {
 function addShelterMarkers() {
 
     if (!map) {
+
         return;
     }
 
+
+    // Remove old shelter markers
+
     shelterMarkers.forEach(
+
         function(marker) {
-            map.removeLayer(marker);
+
+            map.removeLayer(
+                marker
+            );
+
         }
+
     );
+
 
     shelterMarkers = [];
 
+
     verifiedShelters.forEach(
+
         function(shelter) {
 
+
             if (!shelter.available) {
+
                 return;
+
             }
 
+
             const marker =
+
                 L.marker([
+
                     shelter.latitude,
+
                     shelter.longitude
-                ]).addTo(map);
+
+                ])
+
+                .addTo(map);
+
 
             marker.bindPopup(
+
                 "<b>🏠 " +
+
                 shelter.name +
+
                 "</b><br>" +
+
                 "📍 " +
+
                 shelter.district +
+
                 ", " +
+
                 shelter.state +
+
                 "<br>" +
-                "🟢 Available<br>" +
-                "<small>Demo location</small>"
+
+                "🟢 Available" +
+
+                "<br>" +
+
+                "<small>Demo location for testing</small>"
+
             );
 
-            shelterMarkers.push(marker);
+
+            shelterMarkers.push(
+                marker
+            );
+
         }
+
     );
+
 }
 
 
 // =====================================
-// 📏 DISTANCE CALCULATION
+// 📏 CALCULATE DISTANCE
 // =====================================
 
 function calculateDistance(
+
     lat1,
+
     lon1,
+
     lat2,
+
     lon2
+
 ) {
+
 
     const R = 6371;
 
+
     const dLat =
-        (lat2 - lat1) *
-        Math.PI / 180;
+
+        (
+            lat2 - lat1
+        )
+
+        *
+
+        Math.PI
+
+        /
+
+        180;
+
 
     const dLon =
-        (lon2 - lon1) *
-        Math.PI / 180;
+
+        (
+            lon2 - lon1
+        )
+
+        *
+
+        Math.PI
+
+        /
+
+        180;
+
 
     const a =
-        Math.sin(dLat / 2) ** 2 +
+
+        Math.sin(
+            dLat / 2
+        ) ** 2
+
+        +
 
         Math.cos(
-            lat1 * Math.PI / 180
-        ) *
+
+            lat1
+
+            *
+
+            Math.PI
+
+            /
+
+            180
+
+        )
+
+        *
 
         Math.cos(
-            lat2 * Math.PI / 180
-        ) *
 
-        Math.sin(dLon / 2) ** 2;
+            lat2
+
+            *
+
+            Math.PI
+
+            /
+
+            180
+
+        )
+
+        *
+
+        Math.sin(
+            dLon / 2
+        ) ** 2;
+
 
     const c =
-        2 *
+
+        2
+
+        *
+
         Math.atan2(
+
             Math.sqrt(a),
-            Math.sqrt(1 - a)
+
+            Math.sqrt(
+                1 - a
+            )
+
         );
 
+
     return R * c;
+
 }
 
 
@@ -209,45 +411,80 @@ function calculateDistance(
 // =====================================
 
 function findNearestShelter(
-    latitude,
-    longitude
+
+    userLat,
+
+    userLng
+
 ) {
 
+
     let nearest = null;
-    let shortestDistance = Infinity;
+
+    let shortestDistance =
+        Infinity;
+
 
     verifiedShelters.forEach(
+
         function(shelter) {
 
+
             if (!shelter.available) {
+
                 return;
+
             }
 
+
             const distance =
+
                 calculateDistance(
-                    latitude,
-                    longitude,
+
+                    userLat,
+
+                    userLng,
+
                     shelter.latitude,
+
                     shelter.longitude
+
                 );
 
+
             if (
-                distance <
+
+                distance
+
+                <
+
                 shortestDistance
+
             ) {
+
 
                 shortestDistance =
                     distance;
 
+
                 nearest = {
+
                     ...shelter,
-                    distance: distance
+
+                    distance:
+                        distance
+
                 };
+
             }
+
         }
+
     );
 
+
     return nearest;
+
 }
 
 
@@ -257,12 +494,36 @@ function findNearestShelter(
 
 function getCurrentLocation() {
 
-    const locationInput =
-        document.getElementById("location");
+    getUserLocation(
+        false
+    );
 
-    if (!locationInput) {
-        return;
-    }
+}
+
+
+// =====================================
+// 📍 SHOW LIVE LOCATION ON MAP
+// =====================================
+
+function showLiveLocation() {
+
+    getUserLocation(
+        true
+    );
+
+}
+
+
+// =====================================
+// 📍 GET USER GPS LOCATION
+// =====================================
+
+function getUserLocation(
+
+    focusMap
+
+) {
+
 
     if (!navigator.geolocation) {
 
@@ -271,162 +532,411 @@ function getCurrentLocation() {
         );
 
         return;
+
     }
 
-    locationInput.value =
-        "Getting your location...";
 
-    navigator.geolocation.getCurrentPosition(
+    const locationInput =
 
-        async function(position) {
-
-            const latitude =
-                position.coords.latitude;
-
-            const longitude =
-                position.coords.longitude;
-
-            // Show coordinates immediately
-            locationInput.value =
-                latitude.toFixed(6) +
-                ", " +
-                longitude.toFixed(6);
-
-            // Show on map
-            showLocationOnMap(
-                latitude,
-                longitude
-            );
-
-            // Find nearest shelter
-            showNearestShelter(
-                latitude,
-                longitude
-            );
-
-            // Reverse geocoding
-            try {
-
-                const response =
-                    await fetch(
-                        "https://nominatim.openstreetmap.org/reverse?format=json&lat=" +
-                        latitude +
-                        "&lon=" +
-                        longitude +
-                        "&zoom=18&addressdetails=1"
-                    );
-
-                const data =
-                    await response.json();
-
-                if (
-                    data &&
-                    data.display_name
-                ) {
-
-                    locationInput.value =
-                        data.display_name;
-                }
-
-            } catch (error) {
-
-                console.log(
-                    "Address lookup unavailable."
-                );
-            }
-        },
-
-        function(error) {
-
-            console.error(
-                "GPS Error:",
-                error
-            );
-
-            locationInput.value = "";
-
-            alert(
-                "⚠️ Please allow location permission and try again."
-            );
-        },
-
-        {
-            enableHighAccuracy: true,
-            timeout: 15000,
-            maximumAge: 0
-        }
-    );
-}
-
-
-// =====================================
-// 🗺️ SHOW LOCATION ON MAP
-// =====================================
-
-function showLocationOnMap(
-    latitude,
-    longitude
-) {
-
-    if (!map) {
-        initializeMap();
-    }
-
-    if (!map) {
-        return;
-    }
-
-    const userLocation = [
-        latitude,
-        longitude
-    ];
-
-    map.setView(
-        userLocation,
-        14
-    );
-
-    if (userMarker) {
-
-        map.removeLayer(
-            userMarker
+        document.getElementById(
+            "location"
         );
-    }
 
-    userMarker =
-        L.marker(
-            userLocation
-        ).addTo(map);
-
-    userMarker.bindPopup(
-        "<b>📍 My Location</b><br>" +
-        "Latitude: " +
-        latitude.toFixed(6) +
-        "<br>" +
-        "Longitude: " +
-        longitude.toFixed(6)
-    ).openPopup();
 
     const mapStatus =
+
         document.getElementById(
             "mapStatus"
         );
 
+
+    if (locationInput) {
+
+        locationInput.value =
+
+            "Getting your location...";
+
+    }
+
+
     if (mapStatus) {
 
         mapStatus.textContent =
-            "✅ Your current location is shown.";
+
+            "📍 Getting your current location...";
+
     }
-}
 
 
-// =====================================
-// 📍 SHOW LIVE LOCATION BUTTON
-// =====================================
+    navigator.geolocation.getCurrentPosition(
 
-function showLiveLocation() {
 
-    getCurrentLocation();
+        async function(position) {
+
+
+            const latitude =
+
+                position.coords.latitude;
+
+
+            const longitude =
+
+                position.coords.longitude;
+
+
+            currentLatitude =
+                latitude;
+
+
+            currentLongitude =
+                longitude;
+
+
+            console.log(
+
+                "Current Location:",
+
+                latitude,
+
+                longitude
+
+            );
+
+
+            // =====================================
+            // 📍 UPDATE MAP
+            // =====================================
+
+            if (map) {
+
+
+                const userLocation = [
+
+                    latitude,
+
+                    longitude
+
+                ];
+
+
+                if (focusMap) {
+
+
+                    map.setView(
+
+                        userLocation,
+
+                        15
+
+                    );
+
+                }
+
+
+                // Remove old user marker
+
+                if (userMarker) {
+
+
+                    map.removeLayer(
+
+                        userMarker
+
+                    );
+
+                }
+
+
+                // Add new user marker
+
+                userMarker =
+
+                    L.marker(
+
+                        userLocation
+
+                    )
+
+                    .addTo(map);
+
+
+                userMarker.bindPopup(
+
+                    "<b>📍 My Location</b>"
+
+                    +
+
+                    "<br>"
+
+                    +
+
+                    "Latitude: "
+
+                    +
+
+                    latitude.toFixed(6)
+
+                    +
+
+                    "<br>"
+
+                    +
+
+                    "Longitude: "
+
+                    +
+
+                    longitude.toFixed(6)
+
+                );
+
+
+                if (focusMap) {
+
+                    userMarker.openPopup();
+
+                }
+
+            }
+
+
+            // =====================================
+            // 📝 TEMPORARY COORDINATES
+            // =====================================
+
+            if (locationInput) {
+
+
+                locationInput.value =
+
+                    latitude.toFixed(6)
+
+                    +
+
+                    ", "
+
+                    +
+
+                    longitude.toFixed(6);
+
+            }
+
+
+            // =====================================
+            // 🗺️ MAP STATUS
+            // =====================================
+
+            if (mapStatus) {
+
+
+                mapStatus.textContent =
+
+                    "✅ Your current location is shown on the map.";
+
+            }
+
+
+            // =====================================
+            // 🏠 SHOW NEAREST SHELTER
+            // =====================================
+
+            if (map) {
+
+
+                showNearestShelter(
+
+                    latitude,
+
+                    longitude
+
+                );
+
+            }
+
+
+            // =====================================
+            // 🌍 GET ADDRESS
+            // =====================================
+
+            try {
+
+
+                const response =
+
+                    await fetch(
+
+                        "https://nominatim.openstreetmap.org/reverse?format=json&lat="
+
+                        +
+
+                        latitude
+
+                        +
+
+                        "&lon="
+
+                        +
+
+                        longitude
+
+                        +
+
+                        "&zoom=18&addressdetails=1"
+
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+
+                        "Address lookup failed"
+
+                    );
+
+                }
+
+
+                const data =
+
+                    await response.json();
+
+
+                if (
+
+                    locationInput
+
+                    &&
+
+                    data.display_name
+
+                ) {
+
+
+                    locationInput.value =
+
+                        data.display_name;
+
+                }
+
+
+            }
+
+            catch (error) {
+
+
+                console.log(
+
+                    "Address lookup unavailable:",
+
+                    error
+
+                );
+
+            }
+
+
+        },
+
+
+        function(error) {
+
+
+            console.error(
+
+                "GPS Error:",
+
+                error
+
+            );
+
+
+            if (locationInput) {
+
+                locationInput.value = "";
+
+            }
+
+
+            if (mapStatus) {
+
+
+                mapStatus.textContent =
+
+                    "⚠️ Unable to get your location.";
+
+            }
+
+
+            let errorMessage =
+
+                "⚠️ Unable to get your location.";
+
+
+            if (
+
+                error.code === 1
+
+            ) {
+
+
+                errorMessage =
+
+                    "⚠️ Location permission denied. Please allow location access.";
+
+            }
+
+
+            else if (
+
+                error.code === 2
+
+            ) {
+
+
+                errorMessage =
+
+                    "⚠️ Location information is unavailable.";
+
+            }
+
+
+            else if (
+
+                error.code === 3
+
+            ) {
+
+
+                errorMessage =
+
+                    "⚠️ Location request timed out. Please try again.";
+
+            }
+
+
+            alert(
+                errorMessage
+            );
+
+        },
+
+
+        {
+
+            enableHighAccuracy:
+                true,
+
+            timeout:
+                15000,
+
+            maximumAge:
+                0
+
+        }
+
+    );
+
 }
 
 
@@ -435,126 +945,192 @@ function showLiveLocation() {
 // =====================================
 
 function showNearestShelter(
+
     latitude,
+
     longitude
+
 ) {
 
+
     const info =
+
         document.getElementById(
             "shelterInfo"
         );
 
+
+    if (!map) {
+
+        return;
+
+    }
+
+
     const nearest =
+
         findNearestShelter(
+
             latitude,
+
             longitude
+
         );
+
 
     if (!nearest) {
 
+
         if (info) {
 
+
             info.innerHTML =
+
                 "<p>⚠️ No shelter available.</p>";
+
         }
 
+
         return;
+
     }
 
+
     const distance =
-        nearest.distance.toFixed(2);
 
-
-    // Remove old selected marker
-    if (selectedShelterMarker) {
-
-        map.removeLayer(
-            selectedShelterMarker
+        nearest.distance.toFixed(
+            2
         );
 
-        selectedShelterMarker = null;
+
+    // Remove old selected shelter marker
+
+    if (selectedShelterMarker) {
+
+
+        map.removeLayer(
+
+            selectedShelterMarker
+
+        );
+
+
+        selectedShelterMarker =
+            null;
+
     }
 
 
     // Remove old route
+
     if (routeLine) {
 
+
         map.removeLayer(
+
             routeLine
+
         );
 
-        routeLine = null;
+
+        routeLine =
+            null;
+
     }
 
 
-    // Shelter marker
+    // Add nearest shelter marker
+
     selectedShelterMarker =
+
         L.marker([
+
             nearest.latitude,
+
             nearest.longitude
-        ]).addTo(map);
+
+        ])
+
+        .addTo(map);
+
 
     selectedShelterMarker.bindPopup(
-        "<b>🏠 " +
-        nearest.name +
-        "</b><br>" +
-        "📍 " +
-        nearest.district +
-        ", " +
-        nearest.state +
-        "<br>" +
-        "📏 Distance: " +
-        distance +
+
+        "<b>🏠 "
+
+        +
+
+        nearest.name
+
+        +
+
+        "</b>"
+
+        +
+
+        "<br>"
+
+        +
+
+        "📏 Distance: "
+
+        +
+
+        distance
+
+        +
+
         " km"
+
     );
 
 
-    // Line between user and shelter
+    // Draw line
+
     routeLine =
+
         L.polyline(
+
             [
+
                 [
+
                     latitude,
+
                     longitude
+
                 ],
 
                 [
+
                     nearest.latitude,
+
                     nearest.longitude
+
                 ]
+
             ],
+
             {
-                weight: 4
+
+                weight:
+                    4
+
             }
-        ).addTo(map);
+
+        )
+
+        .addTo(map);
 
 
-    // Fit map
-    const bounds =
-        L.latLngBounds([
-            [
-                latitude,
-                longitude
-            ],
+    // Display information
 
-            [
-                nearest.latitude,
-                nearest.longitude
-            ]
-        ]);
-
-    map.fitBounds(
-        bounds,
-        {
-            padding: [50, 50]
-        }
-    );
-
-
-    // Shelter information
     if (info) {
 
-        info.innerHTML = `
+
+        info.innerHTML =
+
+            `
 
             <div class="distance-box">
 
@@ -572,178 +1148,318 @@ function showNearestShelter(
                 </p>
 
                 <p class="distance-text">
+
                     📏 Distance:
+
                     <strong>
+
                         ${distance} km
+
                     </strong>
+
                 </p>
 
                 <small>
+
                     ⚠️ Demo location for testing only
+
                 </small>
 
             </div>
 
-        `;
+            `;
+
     }
+
 }
 
 
 // =====================================
-// 🏠 SELECT SHELTER
+// 🏠 SHOW SELECTED SHELTER
 // =====================================
 
 function showSelectedShelter() {
 
+
     const select =
+
         document.getElementById(
             "shelterSelect"
         );
 
+
     const info =
+
         document.getElementById(
             "shelterInfo"
         );
 
-    if (!select || !info) {
+
+    if (
+
+        !select
+
+        ||
+
+        !info
+
+    ) {
+
         return;
+
     }
 
-    const selected =
+
+    const selectedId =
+
         select.value;
 
-    if (!selected) {
+
+    if (!selectedId) {
+
 
         info.innerHTML =
-            "<p>📍 Select a shelter.</p>";
+
+            "<p>📍 Select a shelter to view details.</p>";
+
 
         return;
+
     }
 
-    if (!userMarker) {
+
+    if (
+
+        currentLatitude === null
+
+        ||
+
+        currentLongitude === null
+
+    ) {
+
 
         info.innerHTML =
-            "<p>⚠️ First click <b>Show My Location</b>.</p>";
+
+            "<p>⚠️ First click <b>Show My Location</b> or <b>Get Current Location</b>.</p>";
+
 
         return;
+
     }
 
-    let shelter = null;
 
-    if (selected === "school") {
+    const shelter =
 
-        shelter =
-            verifiedShelters[0];
+        verifiedShelters.find(
 
-    } else if (
-        selected === "community"
-    ) {
+            function(item) {
 
-        shelter =
-            verifiedShelters[1];
 
-    } else if (
-        selected === "relief"
-    ) {
+                return (
 
-        shelter =
-            verifiedShelters[2];
-    }
+                    item.id === selectedId
+
+                );
+
+            }
+
+        );
+
 
     if (!shelter) {
+
+
+        info.innerHTML =
+
+            "<p>⚠️ Shelter data unavailable.</p>";
+
+
         return;
+
     }
 
-    const userPosition =
-        userMarker.getLatLng();
 
     const distance =
+
         calculateDistance(
-            userPosition.lat,
-            userPosition.lng,
+
+            currentLatitude,
+
+            currentLongitude,
+
             shelter.latitude,
+
             shelter.longitude
+
         );
 
 
-    // Remove previous marker
+    if (!map) {
+
+        return;
+
+    }
+
+
+    // Remove old marker
+
     if (selectedShelterMarker) {
 
+
         map.removeLayer(
+
             selectedShelterMarker
+
         );
+
     }
 
 
-    // Remove previous route
+    // Remove old route
+
     if (routeLine) {
 
+
         map.removeLayer(
+
             routeLine
+
         );
+
     }
 
 
-    // Add shelter marker
+    // Add selected shelter marker
+
     selectedShelterMarker =
+
         L.marker([
+
             shelter.latitude,
+
             shelter.longitude
-        ]).addTo(map);
+
+        ])
+
+        .addTo(map);
+
 
     selectedShelterMarker.bindPopup(
-        "<b>🏠 " +
-        shelter.name +
-        "</b><br>" +
-        "📏 Distance: " +
-        distance.toFixed(2) +
+
+        "<b>🏠 "
+
+        +
+
+        shelter.name
+
+        +
+
+        "</b>"
+
+        +
+
+        "<br>"
+
+        +
+
+        "📏 Distance: "
+
+        +
+
+        distance.toFixed(2)
+
+        +
+
         " km"
-    ).openPopup();
+
+    )
+
+    .openPopup();
 
 
-    // Draw line
+    // Draw route line
+
     routeLine =
+
         L.polyline(
+
             [
+
                 [
-                    userPosition.lat,
-                    userPosition.lng
+
+                    currentLatitude,
+
+                    currentLongitude
+
                 ],
 
                 [
+
                     shelter.latitude,
+
                     shelter.longitude
+
                 ]
+
             ],
+
             {
-                weight: 4
+
+                weight:
+                    4
+
             }
-        ).addTo(map);
+
+        )
+
+        .addTo(map);
 
 
     // Fit map
+
     const bounds =
+
         L.latLngBounds([
+
             [
-                userPosition.lat,
-                userPosition.lng
+
+                currentLatitude,
+
+                currentLongitude
+
             ],
 
             [
+
                 shelter.latitude,
+
                 shelter.longitude
+
             ]
+
         ]);
 
+
     map.fitBounds(
+
         bounds,
+
         {
-            padding: [50, 50]
+
+            padding:
+                [50, 50]
+
         }
+
     );
 
 
-    info.innerHTML = `
+    // Show information
+
+    info.innerHTML =
+
+        `
 
         <div class="distance-box">
 
@@ -761,19 +1477,27 @@ function showSelectedShelter() {
             </p>
 
             <p class="distance-text">
+
                 📏 Distance:
+
                 <strong>
+
                     ${distance.toFixed(2)} km
+
                 </strong>
+
             </p>
 
             <small>
+
                 ⚠️ Demo location for testing only
+
             </small>
 
         </div>
 
-    `;
+        `;
+
 }
 
 
@@ -783,98 +1507,180 @@ function showSelectedShelter() {
 
 async function sendSOS() {
 
+
     const disasterType =
+
         document.getElementById(
             "disasterType"
-        )?.value || "Unknown";
+        )?.value
+
+        ||
+
+        "Unknown";
+
 
     const severity =
+
         document.getElementById(
             "severity"
-        )?.value || "Medium";
+        )?.value
+
+        ||
+
+        "Medium";
+
 
     const userName =
+
         document.getElementById(
             "userName"
-        )?.value.trim() || "";
+        )?.value.trim()
+
+        ||
+
+        "";
+
 
     const location =
+
         document.getElementById(
             "location"
-        )?.value.trim() || "";
+        )?.value.trim()
+
+        ||
+
+        "";
+
 
     const contact =
+
         document.getElementById(
             "contact"
-        )?.value.trim() || "";
+        )?.value.trim()
+
+        ||
+
+        "";
+
 
     const description =
+
         document.getElementById(
             "description"
-        )?.value.trim() || "";
+        )?.value.trim()
+
+        ||
+
+        "";
+
 
     const message =
+
         document.getElementById(
             "alertMessage"
         );
 
+
+    const statusMessage =
+
+        document.getElementById(
+            "statusMessage"
+        );
+
+
     const historyList =
+
         document.getElementById(
             "historyList"
         );
 
 
-    // Validation
+    // =====================================
+    // VALIDATION
+    // =====================================
+
     if (!userName) {
+
 
         alert(
             "⚠️ Please enter your name!"
         );
 
+
         return;
+
     }
 
+
     if (!location) {
+
 
         alert(
             "⚠️ Please get your current location!"
         );
 
+
         return;
+
     }
 
+
     if (!contact) {
+
 
         alert(
             "⚠️ Please enter your emergency contact number!"
         );
 
+
         return;
+
     }
 
+
     if (!description) {
+
 
         alert(
             "⚠️ Please describe the emergency!"
         );
 
+
         return;
+
     }
 
 
     const dateTime =
+
         new Date().toLocaleString();
 
 
     try {
 
-        // Save to Firebase
+
+        if (statusMessage) {
+
+
+            statusMessage.textContent =
+
+                "⏳ Sending SOS...";
+
+        }
+
+
         await addDoc(
+
             collection(
+
                 db,
+
                 "sos_requests"
+
             ),
+
             {
+
                 userName:
                     userName,
 
@@ -886,6 +1692,12 @@ async function sendSOS() {
 
                 location:
                     location,
+
+                latitude:
+                    currentLatitude,
+
+                longitude:
+                    currentLongitude,
 
                 contact:
                     contact,
@@ -901,60 +1713,143 @@ async function sendSOS() {
 
                 createdAt:
                     serverTimestamp()
+
             }
+
         );
 
 
-        // Alert message
+        // =====================================
+        // SUCCESS MESSAGE
+        // =====================================
+
         if (message) {
 
+
             message.textContent =
-                "🚨 SOS REQUEST SENT! " +
-                "Name: " +
-                userName +
-                " | Disaster: " +
-                disasterType +
-                " | Severity: " +
-                severity +
-                " | Location: " +
-                location +
+
+                "🚨 SOS REQUEST SENT! "
+
+                +
+
+                "Name: "
+
+                +
+
+                userName
+
+                +
+
+                " | Disaster: "
+
+                +
+
+                disasterType
+
+                +
+
+                " | Severity: "
+
+                +
+
+                severity
+
+                +
+
                 " | Status: 🔴 Pending";
+
         }
 
 
-        // History
+        if (statusMessage) {
+
+
+            statusMessage.textContent =
+
+                "✅ SOS Request sent successfully!";
+
+        }
+
+
+        // =====================================
+        // ADD HISTORY
+        // =====================================
+
         if (historyList) {
 
+
             if (
-                historyList.innerHTML.includes(
+
+                historyList.textContent.includes(
+
                     "No SOS requests yet."
+
                 )
+
             ) {
 
+
                 historyList.innerHTML = "";
+
             }
 
+
             const item =
+
                 document.createElement(
                     "li"
                 );
 
+
             item.textContent =
-                "🔴 Pending | " +
-                "Name: " +
-                userName +
-                " | Disaster: " +
-                disasterType +
-                " | Severity: " +
-                severity +
-                " | Location: " +
-                location +
-                " | Time: " +
+
+                "🔴 Pending | "
+
+                +
+
+                "Name: "
+
+                +
+
+                userName
+
+                +
+
+                " | Disaster: "
+
+                +
+
+                disasterType
+
+                +
+
+                " | Severity: "
+
+                +
+
+                severity
+
+                +
+
+                " | Location: "
+
+                +
+
+                location
+
+                +
+
+                " | Time: "
+
+                +
+
                 dateTime;
+
 
             historyList.appendChild(
                 item
             );
+
         }
 
 
@@ -964,55 +1859,59 @@ async function sendSOS() {
 
 
         // Clear form
-        const userNameInput =
-            document.getElementById(
-                "userName"
-            );
 
-        const locationInput =
-            document.getElementById(
-                "location"
-            );
-
-        const contactInput =
-            document.getElementById(
-                "contact"
-            );
-
-        const descriptionInput =
-            document.getElementById(
-                "description"
-            );
+        document.getElementById(
+            "userName"
+        ).value = "";
 
 
-        if (userNameInput) {
-            userNameInput.value = "";
-        }
-
-        if (locationInput) {
-            locationInput.value = "";
-        }
-
-        if (contactInput) {
-            contactInput.value = "";
-        }
-
-        if (descriptionInput) {
-            descriptionInput.value = "";
-        }
+        document.getElementById(
+            "contact"
+        ).value = "";
 
 
-    } catch (error) {
+        document.getElementById(
+            "description"
+        ).value = "";
+
+
+        // Keep location after SOS
+        // so the user does not need to
+        // request GPS again immediately.
+
+
+    }
+
+    catch (error) {
+
 
         console.error(
+
             "Firebase Error:",
+
             error
+
         );
 
+
+        if (statusMessage) {
+
+
+            statusMessage.textContent =
+
+                "❌ SOS could not be saved.";
+
+        }
+
+
         alert(
+
             "❌ SOS could not be saved. Check Firebase Firestore rules."
+
         );
+
     }
+
 }
 
 
@@ -1022,16 +1921,40 @@ async function sendSOS() {
 
 function clearHistory() {
 
+
     const historyList =
+
         document.getElementById(
             "historyList"
         );
 
+
     if (historyList) {
 
+
         historyList.innerHTML =
+
             "<li>No SOS requests yet.</li>";
+
     }
+
+
+    const statusMessage =
+
+        document.getElementById(
+            "statusMessage"
+        );
+
+
+    if (statusMessage) {
+
+
+        statusMessage.textContent =
+
+            "🗑️ History cleared.";
+
+    }
+
 }
 
 
@@ -1040,14 +1963,24 @@ function clearHistory() {
 // =====================================
 
 window.addEventListener(
+
     "load",
+
     function() {
+
 
         initializeMap();
 
+
         addShelterMarkers();
 
+
+        console.log(
+            "Smart Disaster Management loaded successfully."
+        );
+
     }
+
 );
 
 
@@ -1058,14 +1991,18 @@ window.addEventListener(
 window.getCurrentLocation =
     getCurrentLocation;
 
+
 window.showLiveLocation =
     showLiveLocation;
+
 
 window.showSelectedShelter =
     showSelectedShelter;
 
+
 window.sendSOS =
     sendSOS;
+
 
 window.clearHistory =
     clearHistory;
