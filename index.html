@@ -2,27 +2,46 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Smart Disaster Management</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+          href="style.css">
+
+    <!-- Leaflet Map CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
 </head>
+
 
 <body>
 
+    <!-- ============================= -->
     <!-- HEADER -->
+    <!-- ============================= -->
+
     <header class="top-header">
 
         <div class="header-content">
 
             <div class="brand">
-                <h1>🚨 Smart Disaster Management</h1>
+
+                <h1>
+                    🚨 Smart Disaster Management
+                </h1>
 
                 <p>
                     Emergency Alert & Response System
                 </p>
+
             </div>
 
             <div class="system-status">
@@ -34,26 +53,49 @@
     </header>
 
 
+    <!-- ============================= -->
     <!-- NAVIGATION -->
+    <!-- ============================= -->
+
     <nav>
 
-        <a href="#home">🏠 Home</a>
+        <a href="#home">
+            🏠 Home
+        </a>
 
-        <a href="#sos">🆘 SOS</a>
+        <a href="#sos">
+            🆘 SOS
+        </a>
 
-        <a href="#alerts">⚠️ Alerts</a>
+        <a href="#mapSection">
+            🗺️ Live Map
+        </a>
 
-        <a href="#shelters">🏠 Shelters</a>
+        <a href="#alerts">
+            ⚠️ Alerts
+        </a>
+
+        <a href="#shelters">
+            🏠 Shelters
+        </a>
 
     </nav>
 
 
+    <!-- ============================= -->
     <!-- MAIN -->
+    <!-- ============================= -->
+
     <main id="home">
 
 
+        <!-- ============================= -->
         <!-- SOS SECTION -->
-        <section id="sos" class="hero">
+        <!-- ============================= -->
+
+        <section id="sos"
+                 class="hero">
+
 
             <div class="section-heading">
 
@@ -128,7 +170,8 @@
                             🟢 Low
                         </option>
 
-                        <option value="Medium" selected>
+                        <option value="Medium"
+                                selected>
                             🟡 Medium
                         </option>
 
@@ -162,7 +205,9 @@
                         class="location-button"
                         onclick="getCurrentLocation()"
                     >
+
                         📍 Get Current Location
+
                     </button>
 
                 </div>
@@ -227,11 +272,11 @@
                     class="sos-button"
                     onclick="sendSOS()"
                 >
+
                     🆘 SEND SOS
+
                 </button>
 
-
-                <!-- STATUS -->
 
                 <p id="statusMessage"></p>
 
@@ -240,9 +285,65 @@
         </section>
 
 
-        <!-- DISASTER ALERTS -->
 
-        <section id="alerts" class="card">
+        <!-- ============================= -->
+        <!-- LIVE MAP -->
+        <!-- ============================= -->
+
+        <section id="mapSection"
+                 class="card">
+
+
+            <div class="card-title">
+
+                <div class="card-icon">
+                    🗺️
+                </div>
+
+                <div>
+
+                    <h2>
+                        Live Location Map
+                    </h2>
+
+                    <p>
+                        View your current location on the map
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- MAP -->
+
+            <div id="map"></div>
+
+
+            <!-- SHOW LOCATION BUTTON -->
+
+            <button
+                type="button"
+                class="location-button"
+                onclick="showLiveLocation()"
+            >
+
+                📍 Show My Location
+
+            </button>
+
+
+        </section>
+
+
+
+        <!-- ============================= -->
+        <!-- ALERTS -->
+        <!-- ============================= -->
+
+        <section id="alerts"
+                 class="card">
+
 
             <div class="card-title">
 
@@ -288,9 +389,13 @@
         </section>
 
 
+
+        <!-- ============================= -->
         <!-- SOS HISTORY -->
+        <!-- ============================= -->
 
         <section class="card">
+
 
             <div class="card-title">
 
@@ -328,15 +433,22 @@
                 class="clear-button"
                 onclick="clearHistory()"
             >
+
                 🗑️ Clear History
+
             </button>
 
         </section>
 
 
-        <!-- SAFE SHELTERS -->
 
-        <section id="shelters" class="card">
+        <!-- ============================= -->
+        <!-- SAFE SHELTERS -->
+        <!-- ============================= -->
+
+        <section id="shelters"
+                 class="card">
+
 
             <div class="card-title">
 
@@ -437,7 +549,10 @@
     </main>
 
 
+
+    <!-- ============================= -->
     <!-- FOOTER -->
+    <!-- ============================= -->
 
     <footer>
 
@@ -456,13 +571,151 @@
     </footer>
 
 
-    <!-- JAVASCRIPT -->
-    <!-- script.js ONE TIME ONLY -->
+
+    <!-- ============================= -->
+    <!-- LEAFLET MAP JAVASCRIPT -->
+    <!-- ============================= -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+
+
+    <!-- ============================= -->
+    <!-- YOUR FIREBASE + SOS SCRIPT -->
+    <!-- ============================= -->
 
     <script
         type="module"
         src="script.js">
     </script>
+
+
+    <!-- ============================= -->
+    <!-- LIVE MAP SCRIPT -->
+    <!-- ============================= -->
+
+    <script>
+
+        let map;
+        let userMarker;
+
+
+        // Create map
+        function initializeMap() {
+
+            map = L.map("map").setView(
+                [20.5937, 78.9629],
+                5
+            );
+
+
+            // OpenStreetMap tiles
+            L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+                    maxZoom: 19,
+                    attribution:
+                        '&copy; OpenStreetMap contributors'
+                }
+            ).addTo(map);
+
+        }
+
+
+        // Show live location
+        function showLiveLocation() {
+
+            if (!navigator.geolocation) {
+
+                alert(
+                    "⚠️ Your browser does not support GPS."
+                );
+
+                return;
+            }
+
+
+            navigator.geolocation.getCurrentPosition(
+
+                function(position) {
+
+                    const latitude =
+                        position.coords.latitude;
+
+                    const longitude =
+                        position.coords.longitude;
+
+
+                    // Move map
+                    map.setView(
+                        [latitude, longitude],
+                        17
+                    );
+
+
+                    // Remove old marker
+                    if (userMarker) {
+
+                        map.removeLayer(
+                            userMarker
+                        );
+
+                    }
+
+
+                    // Add new marker
+                    userMarker =
+                        L.marker([
+                            latitude,
+                            longitude
+                        ]).addTo(map);
+
+
+                    userMarker
+                        .bindPopup(
+                            "📍 You are here<br>" +
+                            "Latitude: " +
+                            latitude.toFixed(6) +
+                            "<br>Longitude: " +
+                            longitude.toFixed(6)
+                        )
+                        .openPopup();
+
+                },
+
+                function(error) {
+
+                    alert(
+                        "⚠️ Unable to get your location.\n" +
+                        "Please allow location permission."
+                    );
+
+                },
+
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 0
+                }
+
+            );
+
+        }
+
+
+        // Initialize map after page loads
+        window.addEventListener(
+            "load",
+            function() {
+
+                initializeMap();
+
+            }
+        );
+
+    </script>
+
 
 </body>
 
