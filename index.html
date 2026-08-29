@@ -24,6 +24,7 @@
 
 <body>
 
+
     <!-- ============================= -->
     <!-- HEADER -->
     <!-- ============================= -->
@@ -53,23 +54,35 @@
     </header>
 
 
+
     <!-- ============================= -->
     <!-- NAVIGATION -->
     <!-- ============================= -->
 
     <nav>
 
-        <a href="#home">🏠 Home</a>
+        <a href="#home">
+            🏠 Home
+        </a>
 
-        <a href="#sos">🆘 SOS</a>
+        <a href="#sos">
+            🆘 SOS
+        </a>
 
-        <a href="#mapSection">🗺️ Live Map</a>
+        <a href="#mapSection">
+            🗺️ Live Map
+        </a>
 
-        <a href="#alerts">⚠️ Alerts</a>
+        <a href="#alerts">
+            ⚠️ Alerts
+        </a>
 
-        <a href="#shelters">🏠 Shelters</a>
+        <a href="#shelters">
+            🏠 Shelters
+        </a>
 
     </nav>
+
 
 
     <!-- ============================= -->
@@ -80,11 +93,12 @@
 
 
         <!-- ============================= -->
-        <!-- SOS SECTION -->
+        <!-- SOS -->
         <!-- ============================= -->
 
         <section id="sos"
                  class="hero">
+
 
             <div class="section-heading">
 
@@ -105,6 +119,7 @@
                 </div>
 
             </div>
+
 
 
             <div class="form-container">
@@ -145,6 +160,7 @@
                 </div>
 
 
+
                 <!-- SEVERITY -->
 
                 <div class="form-group">
@@ -172,6 +188,7 @@
                 </div>
 
 
+
                 <!-- LOCATION -->
 
                 <div class="form-group">
@@ -187,6 +204,7 @@
                         readonly
                     >
 
+
                     <button
                         type="button"
                         id="locationBtn"
@@ -199,6 +217,7 @@
                     </button>
 
                 </div>
+
 
 
                 <!-- NAME -->
@@ -218,6 +237,7 @@
                 </div>
 
 
+
                 <!-- CONTACT -->
 
                 <div class="form-group">
@@ -235,6 +255,7 @@
                 </div>
 
 
+
                 <!-- DESCRIPTION -->
 
                 <div class="form-group">
@@ -250,6 +271,7 @@
                     ></textarea>
 
                 </div>
+
 
 
                 <!-- SOS BUTTON -->
@@ -281,6 +303,7 @@
         <section id="mapSection"
                  class="card">
 
+
             <div class="card-title">
 
                 <div class="card-icon">
@@ -294,7 +317,7 @@
                     </h2>
 
                     <p>
-                        View your current location and selected shelter
+                        View your current location and shelter distance
                     </p>
 
                 </div>
@@ -302,12 +325,14 @@
             </div>
 
 
+
             <!-- MAP -->
 
             <div id="map"></div>
 
 
-            <!-- CURRENT LOCATION -->
+
+            <!-- LOCATION BUTTON -->
 
             <button
                 type="button"
@@ -320,11 +345,14 @@
             </button>
 
 
-            <!-- MAP STATUS -->
+
+            <!-- STATUS -->
 
             <p id="mapStatus"
                style="margin-top:12px;">
+
                 📍 Click "Show My Location" to view your location.
+
             </p>
 
         </section>
@@ -337,6 +365,7 @@
 
         <section id="alerts"
                  class="card">
+
 
             <div class="card-title">
 
@@ -357,6 +386,7 @@
                 </div>
 
             </div>
+
 
 
             <div class="alert-box">
@@ -389,6 +419,7 @@
 
         <section class="card">
 
+
             <div class="card-title">
 
                 <div class="card-icon">
@@ -410,6 +441,7 @@
             </div>
 
 
+
             <ul id="historyList">
 
                 <li>
@@ -417,6 +449,7 @@
                 </li>
 
             </ul>
+
 
 
             <button
@@ -455,12 +488,13 @@
                     </h2>
 
                     <p>
-                        Select a shelter to view it on the map
+                        Select a verified shelter
                     </p>
 
                 </div>
 
             </div>
+
 
 
             <!-- SHELTER SELECT -->
@@ -497,24 +531,24 @@
             </div>
 
 
-            <!-- SELECTED SHELTER INFORMATION -->
+
+            <!-- SHELTER INFO -->
 
             <div id="shelterInfo"
-                 style="margin:15px 0;">
+                 class="distance-box">
 
                 <p>
-                    📍 Select a shelter to view its location on the map.
+                    📍 Show your location first, then select a shelter.
                 </p>
 
             </div>
+
 
 
             <!-- SHELTER CARDS -->
 
             <div class="shelter-grid">
 
-
-                <!-- SHELTER 1 -->
 
                 <div class="shelter-card">
 
@@ -537,7 +571,6 @@
                 </div>
 
 
-                <!-- SHELTER 2 -->
 
                 <div class="shelter-card">
 
@@ -560,7 +593,6 @@
                 </div>
 
 
-                <!-- SHELTER 3 -->
 
                 <div class="shelter-card">
 
@@ -582,9 +614,11 @@
 
                 </div>
 
+
             </div>
 
         </section>
+
 
     </main>
 
@@ -613,7 +647,7 @@
 
 
     <!-- ============================= -->
-    <!-- LEAFLET MAP JAVASCRIPT -->
+    <!-- LEAFLET -->
     <!-- ============================= -->
 
     <script
@@ -621,8 +655,9 @@
     </script>
 
 
+
     <!-- ============================= -->
-    <!-- YOUR EXISTING FIREBASE + SOS -->
+    <!-- FIREBASE + SOS -->
     <!-- ============================= -->
 
     <script
@@ -633,7 +668,7 @@
 
 
     <!-- ============================= -->
-    <!-- LIVE MAP + SHELTER CODE -->
+    <!-- MAP CODE -->
     <!-- ============================= -->
 
     <script>
@@ -643,6 +678,9 @@
         let userMarker = null;
 
         let selectedShelterMarker = null;
+
+        let routeLine = null;
+
 
 
         // =============================
@@ -661,12 +699,14 @@
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {
                     maxZoom: 19,
+
                     attribution:
                         "&copy; OpenStreetMap contributors"
                 }
             ).addTo(map);
 
         }
+
 
 
         // =============================
@@ -710,15 +750,11 @@
                     ];
 
 
-                    // Move map to user
-
                     map.setView(
                         userLocation,
                         16
                     );
 
-
-                    // Remove old user marker
 
                     if (userMarker) {
 
@@ -729,8 +765,6 @@
                     }
 
 
-                    // Add user marker
-
                     userMarker =
                         L.marker(
                             userLocation
@@ -739,12 +773,17 @@
 
                     userMarker
                         .bindPopup(
-                            "<b>📍 You are here</b><br>" +
+
+                            "<b>📍 My Location</b><br>" +
+
                             "Latitude: " +
                             latitude.toFixed(6) +
+
                             "<br>" +
+
                             "Longitude: " +
                             longitude.toFixed(6)
+
                         )
                         .openPopup();
 
@@ -752,9 +791,6 @@
                     mapStatus.textContent =
                         "✅ Your current location is shown on the map.";
 
-
-                    // If shelter already selected,
-                    // show it again
 
                     const shelterSelect =
                         document.getElementById(
@@ -794,9 +830,13 @@
 
 
                 {
+
                     enableHighAccuracy: true,
+
                     timeout: 15000,
+
                     maximumAge: 0
+
                 }
 
             );
@@ -806,7 +846,66 @@
 
 
         // =============================
-        // 🏠 SELECT SHELTER
+        // 🏠 VERIFIED SHELTERS
+        // =============================
+
+        /*
+         * IMPORTANT:
+         *
+         * Real shelter latitude/longitude
+         * must be added here.
+         *
+         * Do NOT use user's coordinates
+         * to create fake shelter locations.
+         *
+         * Until verified coordinates are
+         * available, the website will show
+         * "Verified shelter location unavailable".
+         */
+
+        const verifiedShelters = {
+
+            school: {
+
+                name:
+                    "🏫 Government Higher Secondary School",
+
+                lat: null,
+
+                lng: null
+
+            },
+
+
+            community: {
+
+                name:
+                    "🏢 Community Hall",
+
+                lat: null,
+
+                lng: null
+
+            },
+
+
+            relief: {
+
+                name:
+                    "🏥 District Relief Center",
+
+                lat: null,
+
+                lng: null
+
+            }
+
+        };
+
+
+
+        // =============================
+        // 🏠 SHOW SELECTED SHELTER
         // =============================
 
         function showSelectedShelter() {
@@ -826,96 +925,124 @@
             if (!selected) {
 
                 info.innerHTML =
-                    "<p>📍 Select a shelter to view its location on the map.</p>";
+                    "<p>📍 Select a shelter to view its location.</p>";
 
                 return;
 
             }
 
-
-            // User location must exist first
 
             if (!userMarker) {
 
                 info.innerHTML =
-                    "<p>⚠️ First click <b>Show My Location</b>, then select a shelter.</p>";
+                    "<p>⚠️ First click <b>Show My Location</b>.</p>";
 
                 return;
 
             }
 
+
+            const shelter =
+                verifiedShelters[selected];
+
+
+            if (!shelter) {
+
+                info.innerHTML =
+                    "<p>⚠️ Shelter data unavailable.</p>";
+
+                return;
+
+            }
+
+
+            /*
+             * Do not display fake coordinates.
+             */
+
+            if (
+                shelter.lat === null ||
+                shelter.lng === null
+            ) {
+
+                if (selectedShelterMarker) {
+
+                    map.removeLayer(
+                        selectedShelterMarker
+                    );
+
+                    selectedShelterMarker = null;
+
+                }
+
+
+                if (routeLine) {
+
+                    map.removeLayer(
+                        routeLine
+                    );
+
+                    routeLine = null;
+
+                }
+
+
+                info.innerHTML =
+
+                    "<div class='distance-box'>" +
+
+                    "<h3>" +
+                    shelter.name +
+                    "</h3>" +
+
+                    "<p>⚠️ Verified shelter coordinates are not available yet.</p>" +
+
+                    "<p>Please add the official shelter latitude and longitude before using distance/navigation.</p>" +
+
+                    "</div>";
+
+                return;
+
+            }
+
+
+
+            // =============================
+            // 📍 USER POSITION
+            // =============================
 
             const userPosition =
                 userMarker.getLatLng();
 
 
-            /*
-             * DEMO SHELTER LOCATIONS
-             *
-             * These are temporary demo positions
-             * around the user's current location.
-             *
-             * Replace them later with actual
-             * shelter latitude/longitude.
-             */
+            const shelterPosition =
+                L.latLng(
+                    shelter.lat,
+                    shelter.lng
+                );
 
 
-            const shelterData = {
 
-                school: {
+            // =============================
+            // 📏 DISTANCE
+            // =============================
 
-                    name:
-                        "🏫 Government Higher Secondary School",
-
-                    lat:
-                        userPosition.lat + 0.003,
-
-                    lng:
-                        userPosition.lng + 0.002
-
-                },
+            const distanceInMeters =
+                userPosition.distanceTo(
+                    shelterPosition
+                );
 
 
-                community: {
-
-                    name:
-                        "🏢 Community Hall",
-
-                    lat:
-                        userPosition.lat - 0.002,
-
-                    lng:
-                        userPosition.lng + 0.003
-
-                },
+            const distanceInKm =
+                (
+                    distanceInMeters / 1000
+                ).toFixed(2);
 
 
-                relief: {
 
-                    name:
-                        "🏥 District Relief Center",
-
-                    lat:
-                        userPosition.lat + 0.001,
-
-                    lng:
-                        userPosition.lng - 0.003
-
-                }
-
-            };
-
-
-            const shelter =
-                shelterData[selected];
-
-
-            if (!shelter) {
-                return;
-            }
-
-
-            // Remove old shelter marker
+            // =============================
+            // REMOVE OLD MARKER
+            // =============================
 
             if (selectedShelterMarker) {
 
@@ -926,76 +1053,178 @@
             }
 
 
-            // Add new shelter marker
+
+            // =============================
+            // REMOVE OLD LINE
+            // =============================
+
+            if (routeLine) {
+
+                map.removeLayer(
+                    routeLine
+                );
+
+            }
+
+
+
+            // =============================
+            // 🏠 SHELTER MARKER
+            // =============================
 
             selectedShelterMarker =
                 L.marker([
+
                     shelter.lat,
+
                     shelter.lng
-                ]).addTo(map);
+
+                ])
+                .addTo(map);
 
 
             selectedShelterMarker
                 .bindPopup(
+
                     "<b>" +
                     shelter.name +
                     "</b><br>" +
-                    "🟢 Available"
+
+                    "🟢 Verified Shelter<br>" +
+
+                    "📏 Distance: " +
+                    distanceInKm +
+                    " km"
+
                 )
                 .openPopup();
 
 
-            // Shelter information
 
-            info.innerHTML =
-                "<p><b>" +
-                shelter.name +
-                "</b></p>" +
-                "<p>🟢 Available</p>" +
-                "<p>📍 Shelter location displayed on map.</p>";
+            // =============================
+            // 📍 LINE
+            // =============================
+
+            routeLine =
+                L.polyline(
+
+                    [
+
+                        [
+                            userPosition.lat,
+
+                            userPosition.lng
+                        ],
+
+                        [
+                            shelter.lat,
+
+                            shelter.lng
+                        ]
+
+                    ],
+
+                    {
+
+                        weight: 4
+
+                    }
+
+                )
+                .addTo(map);
 
 
-            // Show user + shelter together
+
+            // =============================
+            // 🔍 FIT MAP
+            // =============================
 
             const bounds =
                 L.latLngBounds([
 
-                    [
-                        userPosition.lat,
-                        userPosition.lng
-                    ],
+                    userPosition,
 
-                    [
-                        shelter.lat,
-                        shelter.lng
-                    ]
+                    shelterPosition
 
                 ]);
 
 
             map.fitBounds(
+
                 bounds,
+
                 {
+
                     padding: [50, 50]
+
                 }
+
             );
+
+
+
+            // =============================
+            // 📋 INFO
+            // =============================
+
+            info.innerHTML =
+
+                "<div class='distance-box'>" +
+
+                "<h3>" +
+                shelter.name +
+                "</h3>" +
+
+                "<p>📍 My Location</p>" +
+
+                "<p>🏠 Verified Shelter</p>" +
+
+                "<p class='distance-text'>" +
+
+                "📏 Distance: " +
+
+                "<strong>" +
+
+                distanceInKm +
+
+                " km" +
+
+                "</strong>" +
+
+                "</p>" +
+
+                "</div>";
 
         }
 
 
 
         // =============================
-        // 🌐 PAGE LOAD
+        // 🚀 PAGE LOAD
         // =============================
 
         window.addEventListener(
+
             "load",
+
             function() {
 
                 initializeMap();
 
             }
+
         );
+
+
+        // =============================
+        // 🌐 GLOBAL FUNCTIONS
+        // =============================
+
+        window.showLiveLocation =
+            showLiveLocation;
+
+        window.showSelectedShelter =
+            showSelectedShelter;
 
     </script>
 
