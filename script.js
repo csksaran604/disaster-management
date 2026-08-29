@@ -6,7 +6,6 @@ import {
     getFirestore,
     collection,
     addDoc,
-    getDocs,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -25,95 +24,27 @@ const firebaseConfig = {
     measurementId: "G-R85HX7MW6C"
 };
 
-
-// =====================================
-// 🔥 FIREBASE START
-// =====================================
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
 // =====================================
-// 🏠 SHELTER DATA
+// 🏠 DEMO SHELTER
 // =====================================
+// Demo/testing location only.
+// Replace with verified shelter data later.
 
-let verifiedShelters = [];
-
-
-// =====================================
-// 🏠 LOAD SHELTERS FROM FIREBASE
-// =====================================
-
-async function loadShelters() {
-
-    try {
-
-        const snapshot =
-            await getDocs(
-                collection(db, "shelters")
-            );
-
-
-        verifiedShelters = [];
-
-
-        snapshot.forEach(function(doc) {
-
-            const data = doc.data();
-
-
-            // Only accept valid coordinates
-            if (
-                data.name &&
-                typeof data.latitude === "number" &&
-                typeof data.longitude === "number"
-            ) {
-
-                verifiedShelters.push({
-
-                    id: doc.id,
-
-                    name: data.name,
-
-                    state: data.state || "",
-
-                    district: data.district || "",
-
-                    latitude: data.latitude,
-
-                    longitude: data.longitude,
-
-                    available:
-                        data.available === true
-
-                });
-
-            }
-
-        });
-
-
-        console.log(
-            "Shelters loaded:",
-            verifiedShelters.length
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Shelter loading error:",
-            error
-        );
-
+const verifiedShelters = [
+    {
+        id: "demo-shelter-1",
+        name: "Demo Emergency Shelter",
+        state: "Tamil Nadu",
+        district: "Demo Location",
+        latitude: 11.3410,
+        longitude: 77.7172,
+        available: true
     }
-
-}
-
-
-// Load shelters when website starts
-loadShelters();
+];
 
 
 // =====================================
@@ -123,368 +54,186 @@ loadShelters();
 async function sendSOS() {
 
     const disasterType =
-        document.getElementById(
-            "disasterType"
-        ).value;
-
-
-    const severityElement =
-        document.getElementById(
-            "severity"
-        );
-
+        document.getElementById("disasterType")?.value || "Unknown";
 
     const severity =
-        severityElement
-            ? severityElement.value
-            : "Medium";
-
+        document.getElementById("severity")?.value || "Medium";
 
     const userName =
-        document.getElementById(
-            "userName"
-        ).value;
-
+        document.getElementById("userName")?.value.trim() || "";
 
     const location =
-        document.getElementById(
-            "location"
-        ).value;
-
+        document.getElementById("location")?.value.trim() || "";
 
     const contact =
-        document.getElementById(
-            "contact"
-        ).value;
-
+        document.getElementById("contact")?.value.trim() || "";
 
     const description =
-        document.getElementById(
-            "description"
-        ).value;
-
+        document.getElementById("description")?.value.trim() || "";
 
     const message =
-        document.getElementById(
-            "alertMessage"
-        );
-
+        document.getElementById("alertMessage");
 
     const historyList =
-        document.getElementById(
-            "historyList"
-        );
+        document.getElementById("historyList");
 
 
-    // =================================
-    // VALIDATION
-    // =================================
-
-    if (userName.trim() === "") {
-
-        alert(
-            "⚠️ Please enter your name!"
-        );
-
+    if (!userName) {
+        alert("⚠️ Please enter your name!");
         return;
     }
 
-
-    if (location.trim() === "") {
-
-        alert(
-            "⚠️ Please get your current location!"
-        );
-
+    if (!location) {
+        alert("⚠️ Please get your current location!");
         return;
     }
 
-
-    if (contact.trim() === "") {
-
-        alert(
-            "⚠️ Please enter an emergency contact number!"
-        );
-
+    if (!contact) {
+        alert("⚠️ Please enter your emergency contact number!");
         return;
     }
 
-
-    if (description.trim() === "") {
-
-        alert(
-            "⚠️ Please describe the emergency!"
-        );
-
+    if (!description) {
+        alert("⚠️ Please describe the emergency!");
         return;
     }
 
-
-    const now = new Date();
 
     const dateTime =
-        now.toLocaleString();
+        new Date().toLocaleString();
 
-
-    // =================================
-    // SAVE SOS TO FIREBASE
-    // =================================
 
     try {
 
         await addDoc(
-            collection(
-                db,
-                "sos_requests"
-            ),
+            collection(db, "sos_requests"),
             {
-
-                userName:
-                    userName,
-
-                disasterType:
-                    disasterType,
-
-                severity:
-                    severity,
-
-                location:
-                    location,
-
-                contact:
-                    contact,
-
-                description:
-                    description,
-
-                status:
-                    "Pending",
-
-                dateTime:
-                    dateTime,
-
-                createdAt:
-                    serverTimestamp()
-
+                userName,
+                disasterType,
+                severity,
+                location,
+                contact,
+                description,
+                status: "Pending",
+                dateTime,
+                createdAt: serverTimestamp()
             }
         );
 
 
-        // =================================
-        // ALERT MESSAGE
-        // =================================
-
         if (message) {
-
             message.textContent =
                 "🚨 SOS REQUEST SENT! " +
-                "Name: " +
-                userName +
-                " | Disaster: " +
-                disasterType +
-                " | Severity: " +
-                severity +
-                " | Location: " +
-                location +
-                " | Status: 🔴 Pending" +
-                " | Time: " +
-                dateTime;
-
-        }
-
-
-        // =================================
-        // HISTORY
-        // =================================
-
-        if (
-            historyList &&
-            historyList.innerHTML.includes(
-                "No SOS requests yet."
-            )
-        ) {
-
-            historyList.innerHTML = "";
-
+                "Name: " + userName +
+                " | Disaster: " + disasterType +
+                " | Severity: " + severity +
+                " | Location: " + location +
+                " | Status: 🔴 Pending";
         }
 
 
         if (historyList) {
 
+            if (
+                historyList.innerHTML.includes(
+                    "No SOS requests yet."
+                )
+            ) {
+                historyList.innerHTML = "";
+            }
+
+
             const historyItem =
-                document.createElement(
-                    "li"
-                );
+                document.createElement("li");
 
 
             const details =
-                document.createElement(
-                    "p"
-                );
+                document.createElement("p");
 
 
             details.textContent =
                 "🔴 Status: Pending" +
-                " | Name: " +
-                userName +
-                " | Disaster: " +
-                disasterType +
-                " | Severity: " +
-                severity +
-                " | Location: " +
-                location +
-                " | Contact: " +
-                contact +
-                " | Description: " +
-                description +
-                " | Time: " +
-                dateTime;
+                " | Name: " + userName +
+                " | Disaster: " + disasterType +
+                " | Severity: " + severity +
+                " | Location: " + location +
+                " | Contact: " + contact +
+                " | Description: " + description +
+                " | Time: " + dateTime;
 
 
-            // Pending button
             const pendingBtn =
-                document.createElement(
-                    "button"
-                );
-
+                document.createElement("button");
 
             pendingBtn.textContent =
                 "🔴 Pending";
 
 
-            pendingBtn.onclick =
-                function() {
+            pendingBtn.onclick = function () {
 
-                    details.textContent =
-                        details.textContent.replace(
-                            /[🔴🟡🟢] Status: (Pending|In Progress|Resolved)/,
-                            "🔴 Status: Pending"
-                        );
+                details.textContent =
+                    details.textContent.replace(
+                        /[🔴🟡🟢] Status: (Pending|In Progress|Resolved)/,
+                        "🔴 Status: Pending"
+                    );
 
-                };
+            };
 
 
-            // In Progress button
             const progressBtn =
-                document.createElement(
-                    "button"
-                );
-
+                document.createElement("button");
 
             progressBtn.textContent =
                 "🟡 In Progress";
 
 
-            progressBtn.onclick =
-                function() {
+            progressBtn.onclick = function () {
 
-                    details.textContent =
-                        details.textContent.replace(
-                            /[🔴🟡🟢] Status: (Pending|In Progress|Resolved)/,
-                            "🟡 Status: In Progress"
-                        );
+                details.textContent =
+                    details.textContent.replace(
+                        /[🔴🟡🟢] Status: (Pending|In Progress|Resolved)/,
+                        "🟡 Status: In Progress"
+                    );
 
-                };
+            };
 
 
-            // Resolved button
             const resolvedBtn =
-                document.createElement(
-                    "button"
-                );
-
+                document.createElement("button");
 
             resolvedBtn.textContent =
                 "🟢 Resolved";
 
 
-            resolvedBtn.onclick =
-                function() {
+            resolvedBtn.onclick = function () {
 
-                    details.textContent =
-                        details.textContent.replace(
-                            /[🔴🟡🟢] Status: (Pending|In Progress|Resolved)/,
-                            "🟢 Status: Resolved"
-                        );
+                details.textContent =
+                    details.textContent.replace(
+                        /[🔴🟡🟢] Status: (Pending|In Progress|Resolved)/,
+                        "🟢 Status: Resolved"
+                    );
 
-                };
-
-
-            historyItem.appendChild(
-                details
-            );
+            };
 
 
-            historyItem.appendChild(
-                pendingBtn
-            );
+            historyItem.appendChild(details);
+            historyItem.appendChild(pendingBtn);
+            historyItem.appendChild(progressBtn);
+            historyItem.appendChild(resolvedBtn);
 
-
-            historyItem.appendChild(
-                progressBtn
-            );
-
-
-            historyItem.appendChild(
-                resolvedBtn
-            );
-
-
-            historyList.appendChild(
-                historyItem
-            );
-
+            historyList.appendChild(historyItem);
         }
 
 
-        // =================================
-        // SUCCESS MESSAGE
-        // =================================
-
         alert(
-            "🆘 SOS Request Sent Successfully!\n\n" +
-
-            "Name: " +
-            userName +
-
-            "\nDisaster: " +
-            disasterType +
-
-            "\nSeverity: " +
-            severity +
-
-            "\nLocation: " +
-            location +
-
-            "\nStatus: Pending" +
-
-            "\nTime: " +
-            dateTime
+            "🆘 SOS Request Sent Successfully!"
         );
 
 
-        // =================================
-        // CLEAR INPUTS
-        // =================================
-
-        document.getElementById(
-            "userName"
-        ).value = "";
-
-
-        document.getElementById(
-            "location"
-        ).value = "";
-
-
-        document.getElementById(
-            "contact"
-        ).value = "";
-
-
-        document.getElementById(
-            "description"
-        ).value = "";
+        document.getElementById("userName").value = "";
+        document.getElementById("location").value = "";
+        document.getElementById("contact").value = "";
+        document.getElementById("description").value = "";
 
 
     } catch (error) {
@@ -494,14 +243,11 @@ async function sendSOS() {
             error
         );
 
-
         alert(
-            "❌ SOS could not be saved.\n\n" +
-            "Please check Firebase configuration and Firestore rules."
+            "❌ SOS could not be saved."
         );
 
     }
-
 }
 
 
@@ -512,10 +258,7 @@ async function sendSOS() {
 function clearHistory() {
 
     const historyList =
-        document.getElementById(
-            "historyList"
-        );
-
+        document.getElementById("historyList");
 
     if (historyList) {
 
@@ -523,11 +266,6 @@ function clearHistory() {
             "<li>No SOS requests yet.</li>";
 
     }
-
-
-    alert(
-        "🗑️ SOS History has been cleared!"
-    );
 
 }
 
@@ -539,15 +277,13 @@ function clearHistory() {
 function getCurrentLocation() {
 
     const locationInput =
-        document.getElementById(
-            "location"
-        );
+        document.getElementById("location");
 
 
     if (!navigator.geolocation) {
 
         alert(
-            "⚠️ Geolocation is not supported by your browser."
+            "⚠️ Geolocation is not supported."
         );
 
         return;
@@ -564,7 +300,6 @@ function getCurrentLocation() {
 
             const latitude =
                 position.coords.latitude;
-
 
             const longitude =
                 position.coords.longitude;
@@ -613,7 +348,6 @@ function getCurrentLocation() {
             }
 
 
-            // Find nearest shelter
             showNearestShelter(
                 latitude,
                 longitude
@@ -629,28 +363,19 @@ function getCurrentLocation() {
                 error
             );
 
-
             locationInput.value = "";
 
-
             alert(
-                "⚠️ Unable to get your location. Please allow location permission."
+                "⚠️ Please allow location permission."
             );
 
         },
 
 
         {
-
-            enableHighAccuracy:
-                true,
-
-            timeout:
-                15000,
-
-            maximumAge:
-                0
-
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
         }
 
     );
@@ -669,14 +394,11 @@ function calculateDistance(
     lon2
 ) {
 
-    const earthRadius =
-        6371;
-
+    const R = 6371;
 
     const dLat =
         (lat2 - lat1) *
         Math.PI / 180;
-
 
     const dLon =
         (lon2 - lon1) *
@@ -684,21 +406,17 @@ function calculateDistance(
 
 
     const a =
-        Math.sin(dLat / 2) *
-        Math.sin(dLat / 2) +
+        Math.sin(dLat / 2) ** 2 +
 
         Math.cos(
-            lat1 *
-            Math.PI / 180
+            lat1 * Math.PI / 180
         ) *
 
         Math.cos(
-            lat2 *
-            Math.PI / 180
+            lat2 * Math.PI / 180
         ) *
 
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+        Math.sin(dLon / 2) ** 2;
 
 
     const c =
@@ -709,7 +427,7 @@ function calculateDistance(
         );
 
 
-    return earthRadius * c;
+    return R * c;
 
 }
 
@@ -719,25 +437,9 @@ function calculateDistance(
 // =====================================
 
 function findNearestShelter(
-    latitude,
-    longitude
+    userLat,
+    userLng
 ) {
-
-    const availableShelters =
-        verifiedShelters.filter(
-            shelter =>
-                shelter.available
-        );
-
-
-    if (
-        availableShelters.length === 0
-    ) {
-
-        return null;
-
-    }
-
 
     let nearest = null;
 
@@ -745,20 +447,20 @@ function findNearestShelter(
         Infinity;
 
 
-    availableShelters.forEach(
+    verifiedShelters.forEach(
         function(shelter) {
+
+            if (!shelter.available) {
+                return;
+            }
+
 
             const distance =
                 calculateDistance(
-
-                    latitude,
-
-                    longitude,
-
+                    userLat,
+                    userLng,
                     shelter.latitude,
-
                     shelter.longitude
-
                 );
 
 
@@ -770,14 +472,9 @@ function findNearestShelter(
                 shortestDistance =
                     distance;
 
-
                 nearest = {
-
                     ...shelter,
-
-                    distance:
-                        distance
-
+                    distance
                 };
 
             }
@@ -787,12 +484,11 @@ function findNearestShelter(
 
 
     return nearest;
-
 }
 
 
 // =====================================
-// 🏠 SHOW NEAREST SHELTER
+// 🏠 SHOW SHELTER
 // =====================================
 
 function showNearestShelter(
@@ -807,40 +503,27 @@ function showNearestShelter(
 
 
     if (!shelterInfo) {
-
         return;
-
     }
 
 
-    const nearest =
+    const shelter =
         findNearestShelter(
             latitude,
             longitude
         );
 
 
-    if (!nearest) {
+    if (!shelter) {
 
         shelterInfo.innerHTML = `
-
             <div class="distance-box">
-
-                <h3>
-                    🏠 Nearest Shelter
-                </h3>
-
-                <p>
-                    ⚠️ No verified available
-                    shelter was found.
-                </p>
-
+                <h3>🏠 Nearest Shelter</h3>
+                <p>No shelter available.</p>
             </div>
-
         `;
 
         return;
-
     }
 
 
@@ -849,32 +532,32 @@ function showNearestShelter(
         <div class="distance-box">
 
             <h3>
-                🏠 ${nearest.name}
+                🏠 ${shelter.name}
             </h3>
 
             <p>
-                📍 ${nearest.district},
-                ${nearest.state}
+                📍 ${shelter.district},
+                ${shelter.state}
             </p>
 
-            <p class="distance-text">
-
+            <p>
                 📏 Distance:
-
                 <strong>
-                    ${nearest.distance.toFixed(2)} km
+                    ${shelter.distance.toFixed(2)} km
                 </strong>
-
             </p>
 
             <p>
                 🟢 Available
             </p>
 
+            <small>
+                ⚠️ Demo location for testing only
+            </small>
+
         </div>
 
     `;
-
 }
 
 
@@ -885,14 +568,11 @@ function showNearestShelter(
 window.sendSOS =
     sendSOS;
 
-
 window.clearHistory =
     clearHistory;
 
-
 window.getCurrentLocation =
     getCurrentLocation;
-
 
 window.showNearestShelter =
     showNearestShelter;
