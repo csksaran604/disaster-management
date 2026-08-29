@@ -1,139 +1,625 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Smart Disaster Management</title>
-    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet"
+          href="style.css">
 </head>
+
 
 <body>
 
-    <!-- Header -->
-    <header>
-        <h1>🚨 Smart Disaster Management</h1>
-        <p>Emergency Alert and Response System</p>
+    <!-- ============================= -->
+    <!-- HEADER -->
+    <!-- ============================= -->
+
+    <header class="top-header">
+
+        <div class="header-content">
+
+            <div class="brand">
+
+                <h1>
+                    🚨 Smart Disaster Management
+                </h1>
+
+                <p>
+                    Emergency Alert & Response System
+                </p>
+
+            </div>
+
+
+            <div class="system-status">
+                🟢 System Active
+            </div>
+
+        </div>
+
     </header>
 
-    <!-- Navigation -->
+
+    <!-- ============================= -->
+    <!-- NAVIGATION -->
+    <!-- ============================= -->
+
     <nav>
-        <a href="#home">Home</a>
-        <a href="#sos">SOS</a>
-        <a href="#alerts">Alerts</a>
-        <a href="#shelters">Shelters</a>
+
+        <a href="#home">
+            🏠 Home
+        </a>
+
+        <a href="#sos">
+            🆘 SOS
+        </a>
+
+        <a href="#alerts">
+            ⚠️ Alerts
+        </a>
+
+        <a href="#shelters">
+            🏠 Shelters
+        </a>
+
     </nav>
 
-    <!-- Main Content -->
+
+    <!-- ============================= -->
+    <!-- MAIN -->
+    <!-- ============================= -->
+
     <main id="home">
-        <section class="hero">
-            <h2>Stay Safe. Stay Alert.</h2>
-            <p>
-                Get emergency alerts, send SOS requests,
-                and find nearby safe shelters.
-            </p>
-            <label for="disasterType"><b>Select Disaster Type:</b></label>
-
-<select id="disasterType">
-    <option value="Flood">🌊 Flood</option>
-    <option value="Fire">🔥 Fire</option>
-    <option value="Earthquake">🌍 Earthquake</option>
-    <option value="Cyclone">🌀 Cyclone</option>
-    <option value="Virus">🦠 Virus</option>
-</select>
-
-<br><br>
-<label for="location"><b>Enter Your Location:</b></label>
-<br>
-<input 
-    type="text" 
-    id="location" 
-    placeholder="Enter your location"
->
-<br><br>
-<button type="button" onclick="getCurrentLocation()">
-    📍 Get Current Location
-</button>
 
 
-<br><br>
-<label for="userName"><b>Your Name:</b></label>
-<br>
-<input type="text" id="userName" placeholder="Enter your name">
+        <!-- ============================= -->
+        <!-- DASHBOARD CARDS -->
+        <!-- ============================= -->
 
-<br><br>
-<label for="contact"><b>Emergency Contact Number:</b></label>
-<br>
-<input 
-    type="tel" 
-    id="contact" 
-    placeholder="Enter emergency contact number"
->
+        <section class="dashboard">
 
-<br><br>
-<label for="description"><b>Emergency Description:</b></label>
-<br>
-<textarea 
-    id="description" 
-    placeholder="Describe the emergency..."
-    rows="4"
-></textarea>
+            <div class="dashboard-card">
 
-<br><br>
+                <span class="dashboard-icon">
+                    🚨
+                </span>
 
-            <button onclick="sendSOS()">🆘 SEND SOS</button>
+                <div>
+                    <h3>
+                        Emergency
+                    </h3>
+
+                    <p>
+                        Response Ready
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <span class="dashboard-icon">
+                    📍
+                </span>
+
+                <div>
+                    <h3>
+                        Location
+                    </h3>
+
+                    <p>
+                        GPS Available
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <span class="dashboard-icon">
+                    🆘
+                </span>
+
+                <div>
+                    <h3>
+                        SOS
+                    </h3>
+
+                    <p>
+                        Emergency Support
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <span class="dashboard-icon">
+                    🏠
+                </span>
+
+                <div>
+                    <h3>
+                        Shelters
+                    </h3>
+
+                    <p>
+                        Safe Places
+                    </p>
+                </div>
+
+            </div>
+
         </section>
 
-        <!-- Alerts -->
-        <section id="alerts" class="card">
-            <h2>⚠️ Disaster Alerts</h2>
-            <p id="alertMessage">No active emergency alerts.</p>
-        </section>
-        <!-- SOS History -->
-<section class="card">
-    <h2>📋 SOS Request History</h2>
-    <ul id="historyList">
-        <li>No SOS requests yet.</li>
-    </ul>
-    <br>
-    <button onclick="clearHistory()">🗑️ Clear History</button>
-</section>
 
-        <!-- Shelters -->
-        <section id="shelters" class="card">
-            <h2>🏠 Safe Shelters</h2>
-            <ul>
-                <li>Government Higher Secondary School</li>
-                <li>Community Hall</li>
-                <li>District Relief Center</li>
+
+        <!-- ============================= -->
+        <!-- SOS SECTION -->
+        <!-- ============================= -->
+
+        <section id="sos"
+                 class="hero">
+
+
+            <div class="section-heading">
+
+                <div class="section-icon">
+                    🆘
+                </div>
+
+                <div>
+
+                    <h2>
+                        Emergency SOS
+                    </h2>
+
+                    <p>
+                        Send your emergency request quickly
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-container">
+
+
+                <!-- DISASTER TYPE -->
+
+                <div class="form-group">
+
+                    <label for="disasterType">
+                        ⚠️ Disaster Type
+                    </label>
+
+                    <select id="disasterType">
+
+                        <option value="Flood">
+                            🌊 Flood
+                        </option>
+
+                        <option value="Fire">
+                            🔥 Fire
+                        </option>
+
+                        <option value="Earthquake">
+                            🌍 Earthquake
+                        </option>
+
+                        <option value="Cyclone">
+                            🌀 Cyclone
+                        </option>
+
+                        <option value="Virus">
+                            🦠 Virus
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- SEVERITY -->
+
+                <div class="form-group">
+
+                    <label for="severity">
+                        🚦 Emergency Severity
+                    </label>
+
+                    <select id="severity">
+
+                        <option value="Low">
+                            🟢 Low
+                        </option>
+
+                        <option value="Medium"
+                                selected>
+                            🟡 Medium
+                        </option>
+
+                        <option value="High">
+                            🔴 High
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- LOCATION -->
+
+                <div class="form-group">
+
+                    <label for="location">
+                        📍 Your Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        placeholder="Get your current location"
+                        readonly
+                    >
+
+
+                    <button
+                        type="button"
+                        id="locationBtn"
+                        class="location-button"
+                        onclick="getCurrentLocation()"
+                    >
+
+                        📍 Get Current Location
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label for="userName">
+                        👤 Your Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="userName"
+                        placeholder="Enter your name"
+                    >
+
+                </div>
+
+
+
+                <!-- CONTACT -->
+
+                <div class="form-group">
+
+                    <label for="contact">
+                        📞 Emergency Contact
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="contact"
+                        placeholder="Enter emergency contact number"
+                    >
+
+                </div>
+
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label for="description">
+                        📝 Emergency Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        rows="4"
+                        placeholder="Describe the emergency..."
+                    ></textarea>
+
+                </div>
+
+
+
+                <!-- SOS BUTTON -->
+
+                <button
+                    type="button"
+                    id="sosBtn"
+                    class="sos-button"
+                    onclick="sendSOS()"
+                >
+
+                    🆘 SEND SOS
+
+                </button>
+
+
+                <!-- STATUS -->
+
+                <p id="statusMessage"></p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ============================= -->
+        <!-- ALERTS -->
+        <!-- ============================= -->
+
+        <section id="alerts"
+                 class="card">
+
+
+            <div class="card-title">
+
+                <div class="card-icon">
+                    ⚠️
+                </div>
+
+                <div>
+
+                    <h2>
+                        Disaster Alerts
+                    </h2>
+
+                    <p>
+                        Latest emergency information
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="alert-box">
+
+                <div class="alert-icon">
+                    ℹ️
+                </div>
+
+                <div>
+
+                    <strong>
+                        No Active Emergency
+                    </strong>
+
+                    <p id="alertMessage">
+                        No active emergency alerts.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ============================= -->
+        <!-- SOS HISTORY -->
+        <!-- ============================= -->
+
+        <section class="card">
+
+
+            <div class="card-title">
+
+                <div class="card-icon">
+                    📋
+                </div>
+
+                <div>
+
+                    <h2>
+                        SOS Request History
+                    </h2>
+
+                    <p>
+                        Your previous emergency requests
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <ul id="historyList">
+
+                <li>
+                    No SOS requests yet.
+                </li>
+
             </ul>
+
+
+            <button
+                type="button"
+                id="clearHistoryBtn"
+                class="clear-button"
+                onclick="clearHistory()"
+            >
+
+                🗑️ Clear History
+
+            </button>
+
         </section>
+
+
+
+        <!-- ============================= -->
+        <!-- SAFE SHELTERS -->
+        <!-- ============================= -->
+
+        <section id="shelters"
+                 class="card">
+
+
+            <div class="card-title">
+
+                <div class="card-icon">
+                    🏠
+                </div>
+
+                <div>
+
+                    <h2>
+                        Safe Shelters
+                    </h2>
+
+                    <p>
+                        Emergency safe locations
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="shelter-grid">
+
+
+                <!-- SHELTER 1 -->
+
+                <div class="shelter-card">
+
+                    <div class="shelter-icon">
+                        🏫
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Government Higher Secondary School
+                        </h3>
+
+                        <p class="available">
+                            🟢 Available
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SHELTER 2 -->
+
+                <div class="shelter-card">
+
+                    <div class="shelter-icon">
+                        🏢
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Community Hall
+                        </h3>
+
+                        <p class="available">
+                            🟢 Available
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SHELTER 3 -->
+
+                <div class="shelter-card">
+
+                    <div class="shelter-icon">
+                        🏥
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            District Relief Center
+                        </h3>
+
+                        <p class="available">
+                            🟢 Available
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
     </main>
 
-    <!-- Footer -->
+
+
+    <!-- ============================= -->
+    <!-- FOOTER -->
+    <!-- ============================= -->
+
     <footer>
-        <p>© 2026 Smart Disaster Management System</p>
+
+        <h3>
+            🚨 Smart Disaster Management
+        </h3>
+
+        <p>
+            Stay Safe • Stay Alert • Stay Prepared
+        </p>
+
+        <small>
+            © 2026 Smart Disaster Management System
+        </small>
+
     </footer>
 
-    <script type="module" src="script.js"></script>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCOug6KwpFtoeXNVjOAZOUg1eWVu7npkcc",
-  authDomain: "disaster-management-96929.firebaseapp.com",
-  projectId: "disaster-management-96929",
-  storageBucket: "disaster-management-96929.firebasestorage.app",
-  messagingSenderId: "349356499578",
-  appId: "1:349356499578:web:7de4f7b871b0332c4391c3",
-  measurementId: "G-R85HX7MW6C"
-};
 
-  
-  
-  
-</script>
-<script type="module" src="script.js"></script>
+    <!-- ============================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================= -->
+
+    <!-- IMPORTANT:
+         script.js மட்டும் ONE TIME -->
+
+    <script
+        type="module"
+        src="script.js">
+    </script>
+
+
 </body>
+
 </html>
