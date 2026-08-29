@@ -43,7 +43,16 @@ const db = getFirestore(app);
 // இந்த array-ல் சேர்க்கலாம்.
 //
 
-const verifiedShelters = [];
+const verifiedShelters = [
+    {
+        id: "shelter001",
+        name: "Official Shelter",
+        state: "Tamil Nadu",
+        district: "Erode",
+        latitude: 0,
+        longitude: 0
+    }
+];
 
 
 // =====================================
