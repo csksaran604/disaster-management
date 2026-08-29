@@ -11,7 +11,7 @@ import {
 
 
 // =====================================
-// 🔥 FIREBASE
+// 🔥 FIREBASE CONFIG
 // =====================================
 
 const firebaseConfig = {
@@ -72,6 +72,7 @@ const verifiedShelters = [
 let map = null;
 let userMarker = null;
 let shelterMarkers = [];
+let selectedShelterMarker = null;
 let routeLine = null;
 
 
@@ -88,11 +89,14 @@ function initializeMap() {
         return;
     }
 
-    map =
-        L.map("map").setView(
-            [11.3410, 77.7172],
-            10
-        );
+    if (map !== null) {
+        return;
+    }
+
+    map = L.map("map").setView(
+        [11.3410, 77.7172],
+        10
+    );
 
     L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -102,7 +106,6 @@ function initializeMap() {
                 "&copy; OpenStreetMap contributors"
         }
     ).addTo(map);
-
 }
 
 
@@ -117,7 +120,9 @@ function addShelterMarkers() {
     }
 
     shelterMarkers.forEach(
-        marker => map.removeLayer(marker)
+        function(marker) {
+            map.removeLayer(marker);
+        }
     );
 
     shelterMarkers = [];
@@ -155,7 +160,7 @@ function addShelterMarkers() {
 
 
 // =====================================
-// 📏 DISTANCE
+// 📏 DISTANCE CALCULATION
 // =====================================
 
 function calculateDistance(
@@ -236,7 +241,7 @@ function findNearestShelter(
 
                 nearest = {
                     ...shelter,
-                    distance
+                    distance: distance
                 };
             }
         }
@@ -247,10 +252,17 @@ function findNearestShelter(
 
 
 // =====================================
-// 📍 SHOW CURRENT LOCATION
+// 📍 GET CURRENT LOCATION
 // =====================================
 
-function showLiveLocation() {
+function getCurrentLocation() {
+
+    const locationInput =
+        document.getElementById("location");
+
+    if (!locationInput) {
+        return;
+    }
 
     if (!navigator.geolocation) {
 
@@ -261,16 +273,8 @@ function showLiveLocation() {
         return;
     }
 
-    const mapStatus =
-        document.getElementById(
-            "mapStatus"
-        );
-
-    if (mapStatus) {
-
-        mapStatus.textContent =
-            "📍 Getting your current location...";
-    }
+    locationInput.value =
+        "Getting your location...";
 
     navigator.geolocation.getCurrentPosition(
 
@@ -282,77 +286,25 @@ function showLiveLocation() {
             const longitude =
                 position.coords.longitude;
 
+            // Show coordinates immediately
+            locationInput.value =
+                latitude.toFixed(6) +
+                ", " +
+                longitude.toFixed(6);
 
-            const userLocation = [
+            // Show on map
+            showLocationOnMap(
                 latitude,
                 longitude
-            ];
-
-
-            // Map center
-            map.setView(
-                userLocation,
-                14
             );
 
-
-            // Remove old user marker
-            if (userMarker) {
-
-                map.removeLayer(
-                    userMarker
-                );
-            }
-
-
-            // Add user marker
-            userMarker =
-                L.marker(
-                    userLocation
-                ).addTo(map);
-
-
-            userMarker.bindPopup(
-                "<b>📍 My Location</b><br>" +
-                "Latitude: " +
-                latitude.toFixed(6) +
-                "<br>" +
-                "Longitude: " +
-                longitude.toFixed(6)
-            ).openPopup();
-
-
-            // Location text
-            const locationInput =
-                document.getElementById(
-                    "location"
-                );
-
-
-            if (locationInput) {
-
-                locationInput.value =
-                    latitude.toFixed(6) +
-                    ", " +
-                    longitude.toFixed(6);
-            }
-
-
-            if (mapStatus) {
-
-                mapStatus.textContent =
-                    "✅ Your current location is shown.";
-            }
-
-
-            // Show nearest shelter automatically
+            // Find nearest shelter
             showNearestShelter(
                 latitude,
                 longitude
             );
 
-
-            // Reverse location
+            // Reverse geocoding
             try {
 
                 const response =
@@ -368,7 +320,7 @@ function showLiveLocation() {
                     await response.json();
 
                 if (
-                    locationInput &&
+                    data &&
                     data.display_name
                 ) {
 
@@ -382,7 +334,6 @@ function showLiveLocation() {
                     "Address lookup unavailable."
                 );
             }
-
         },
 
         function(error) {
@@ -392,11 +343,7 @@ function showLiveLocation() {
                 error
             );
 
-            if (mapStatus) {
-
-                mapStatus.textContent =
-                    "⚠️ Unable to get your location.";
-            }
+            locationInput.value = "";
 
             alert(
                 "⚠️ Please allow location permission and try again."
@@ -409,6 +356,77 @@ function showLiveLocation() {
             maximumAge: 0
         }
     );
+}
+
+
+// =====================================
+// 🗺️ SHOW LOCATION ON MAP
+// =====================================
+
+function showLocationOnMap(
+    latitude,
+    longitude
+) {
+
+    if (!map) {
+        initializeMap();
+    }
+
+    if (!map) {
+        return;
+    }
+
+    const userLocation = [
+        latitude,
+        longitude
+    ];
+
+    map.setView(
+        userLocation,
+        14
+    );
+
+    if (userMarker) {
+
+        map.removeLayer(
+            userMarker
+        );
+    }
+
+    userMarker =
+        L.marker(
+            userLocation
+        ).addTo(map);
+
+    userMarker.bindPopup(
+        "<b>📍 My Location</b><br>" +
+        "Latitude: " +
+        latitude.toFixed(6) +
+        "<br>" +
+        "Longitude: " +
+        longitude.toFixed(6)
+    ).openPopup();
+
+    const mapStatus =
+        document.getElementById(
+            "mapStatus"
+        );
+
+    if (mapStatus) {
+
+        mapStatus.textContent =
+            "✅ Your current location is shown.";
+    }
+}
+
+
+// =====================================
+// 📍 SHOW LIVE LOCATION BUTTON
+// =====================================
+
+function showLiveLocation() {
+
+    getCurrentLocation();
 }
 
 
@@ -432,7 +450,6 @@ function showNearestShelter(
             longitude
         );
 
-
     if (!nearest) {
 
         if (info) {
@@ -444,9 +461,19 @@ function showNearestShelter(
         return;
     }
 
-
     const distance =
         nearest.distance.toFixed(2);
+
+
+    // Remove old selected marker
+    if (selectedShelterMarker) {
+
+        map.removeLayer(
+            selectedShelterMarker
+        );
+
+        selectedShelterMarker = null;
+    }
 
 
     // Remove old route
@@ -455,28 +482,34 @@ function showNearestShelter(
         map.removeLayer(
             routeLine
         );
+
+        routeLine = null;
     }
 
 
-    // Add nearest shelter marker
-    const shelterMarker =
+    // Shelter marker
+    selectedShelterMarker =
         L.marker([
             nearest.latitude,
             nearest.longitude
         ]).addTo(map);
 
-
-    shelterMarker.bindPopup(
+    selectedShelterMarker.bindPopup(
         "<b>🏠 " +
         nearest.name +
         "</b><br>" +
+        "📍 " +
+        nearest.district +
+        ", " +
+        nearest.state +
+        "<br>" +
         "📏 Distance: " +
         distance +
         " km"
-    ).openPopup();
+    );
 
 
-    // Draw line
+    // Line between user and shelter
     routeLine =
         L.polyline(
             [
@@ -510,7 +543,6 @@ function showNearestShelter(
             ]
         ]);
 
-
     map.fitBounds(
         bounds,
         {
@@ -519,7 +551,7 @@ function showNearestShelter(
     );
 
 
-    // Display info
+    // Shelter information
     if (info) {
 
         info.innerHTML = `
@@ -540,13 +572,10 @@ function showNearestShelter(
                 </p>
 
                 <p class="distance-text">
-
                     📏 Distance:
-
                     <strong>
                         ${distance} km
                     </strong>
-
                 </p>
 
                 <small>
@@ -576,15 +605,12 @@ function showSelectedShelter() {
             "shelterInfo"
         );
 
-
     if (!select || !info) {
         return;
     }
 
-
     const selected =
         select.value;
-
 
     if (!selected) {
 
@@ -594,7 +620,6 @@ function showSelectedShelter() {
         return;
     }
 
-
     if (!userMarker) {
 
         info.innerHTML =
@@ -603,9 +628,7 @@ function showSelectedShelter() {
         return;
     }
 
-
     let shelter = null;
-
 
     if (selected === "school") {
 
@@ -627,15 +650,12 @@ function showSelectedShelter() {
             verifiedShelters[2];
     }
 
-
     if (!shelter) {
         return;
     }
 
-
     const userPosition =
         userMarker.getLatLng();
-
 
     const distance =
         calculateDistance(
@@ -646,6 +666,16 @@ function showSelectedShelter() {
         );
 
 
+    // Remove previous marker
+    if (selectedShelterMarker) {
+
+        map.removeLayer(
+            selectedShelterMarker
+        );
+    }
+
+
+    // Remove previous route
     if (routeLine) {
 
         map.removeLayer(
@@ -654,14 +684,14 @@ function showSelectedShelter() {
     }
 
 
-    const marker =
+    // Add shelter marker
+    selectedShelterMarker =
         L.marker([
             shelter.latitude,
             shelter.longitude
         ]).addTo(map);
 
-
-    marker.bindPopup(
+    selectedShelterMarker.bindPopup(
         "<b>🏠 " +
         shelter.name +
         "</b><br>" +
@@ -671,6 +701,7 @@ function showSelectedShelter() {
     ).openPopup();
 
 
+    // Draw line
     routeLine =
         L.polyline(
             [
@@ -688,6 +719,28 @@ function showSelectedShelter() {
                 weight: 4
             }
         ).addTo(map);
+
+
+    // Fit map
+    const bounds =
+        L.latLngBounds([
+            [
+                userPosition.lat,
+                userPosition.lng
+            ],
+
+            [
+                shelter.latitude,
+                shelter.longitude
+            ]
+        ]);
+
+    map.fitBounds(
+        bounds,
+        {
+            padding: [50, 50]
+        }
+    );
 
 
     info.innerHTML = `
@@ -708,13 +761,10 @@ function showSelectedShelter() {
             </p>
 
             <p class="distance-text">
-
                 📏 Distance:
-
                 <strong>
                     ${distance.toFixed(2)} km
                 </strong>
-
             </p>
 
             <small>
@@ -774,6 +824,7 @@ async function sendSOS() {
         );
 
 
+    // Validation
     if (!userName) {
 
         alert(
@@ -782,7 +833,6 @@ async function sendSOS() {
 
         return;
     }
-
 
     if (!location) {
 
@@ -793,7 +843,6 @@ async function sendSOS() {
         return;
     }
 
-
     if (!contact) {
 
         alert(
@@ -802,7 +851,6 @@ async function sendSOS() {
 
         return;
     }
-
 
     if (!description) {
 
@@ -820,29 +868,36 @@ async function sendSOS() {
 
     try {
 
+        // Save to Firebase
         await addDoc(
             collection(
                 db,
                 "sos_requests"
             ),
             {
+                userName:
+                    userName,
 
-                userName,
+                disasterType:
+                    disasterType,
 
-                disasterType,
+                severity:
+                    severity,
 
-                severity,
+                location:
+                    location,
 
-                location,
+                contact:
+                    contact,
 
-                contact,
-
-                description,
+                description:
+                    description,
 
                 status:
                     "Pending",
 
-                dateTime,
+                dateTime:
+                    dateTime,
 
                 createdAt:
                     serverTimestamp()
@@ -850,20 +905,24 @@ async function sendSOS() {
         );
 
 
+        // Alert message
         if (message) {
 
             message.textContent =
                 "🚨 SOS REQUEST SENT! " +
-                "| Name: " +
+                "Name: " +
                 userName +
                 " | Disaster: " +
                 disasterType +
                 " | Severity: " +
                 severity +
+                " | Location: " +
+                location +
                 " | Status: 🔴 Pending";
         }
 
 
+        // History
         if (historyList) {
 
             if (
@@ -875,25 +934,23 @@ async function sendSOS() {
                 historyList.innerHTML = "";
             }
 
-
             const item =
                 document.createElement(
                     "li"
                 );
 
-
             item.textContent =
                 "🔴 Pending | " +
+                "Name: " +
                 userName +
-                " | " +
+                " | Disaster: " +
                 disasterType +
-                " | " +
+                " | Severity: " +
                 severity +
-                " | " +
+                " | Location: " +
                 location +
-                " | " +
+                " | Time: " +
                 dateTime;
-
 
             historyList.appendChild(
                 item
@@ -906,21 +963,43 @@ async function sendSOS() {
         );
 
 
-        document.getElementById(
-            "userName"
-        ).value = "";
+        // Clear form
+        const userNameInput =
+            document.getElementById(
+                "userName"
+            );
 
-        document.getElementById(
-            "location"
-        ).value = "";
+        const locationInput =
+            document.getElementById(
+                "location"
+            );
 
-        document.getElementById(
-            "contact"
-        ).value = "";
+        const contactInput =
+            document.getElementById(
+                "contact"
+            );
 
-        document.getElementById(
-            "description"
-        ).value = "";
+        const descriptionInput =
+            document.getElementById(
+                "description"
+            );
+
+
+        if (userNameInput) {
+            userNameInput.value = "";
+        }
+
+        if (locationInput) {
+            locationInput.value = "";
+        }
+
+        if (contactInput) {
+            contactInput.value = "";
+        }
+
+        if (descriptionInput) {
+            descriptionInput.value = "";
+        }
 
 
     } catch (error) {
