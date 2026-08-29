@@ -6,6 +6,7 @@ import {
     getFirestore,
     collection,
     addDoc,
+    getDocs,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -26,7 +27,7 @@ const firebaseConfig = {
 
 
 // =====================================
-// 🔥 START FIREBASE
+// 🔥 FIREBASE START
 // =====================================
 
 const app = initializeApp(firebaseConfig);
@@ -34,25 +35,85 @@ const db = getFirestore(app);
 
 
 // =====================================
-// 🏠 VERIFIED SHELTER DATA
+// 🏠 SHELTER DATA
 // =====================================
-//
-// IMPORTANT:
-// இங்கே fake coordinates இல்லை.
-// Verified official coordinates கிடைத்த பிறகு
-// இந்த array-ல் சேர்க்கலாம்.
-//
 
-const verifiedShelters = [
-    {
-        id: "shelter001",
-        name: "Official Shelter",
-        state: "Tamil Nadu",
-        district: "Erode",
-        latitude: 0,
-        longitude: 0
+let verifiedShelters = [];
+
+
+// =====================================
+// 🏠 LOAD SHELTERS FROM FIREBASE
+// =====================================
+
+async function loadShelters() {
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(db, "shelters")
+            );
+
+
+        verifiedShelters = [];
+
+
+        snapshot.forEach(function(doc) {
+
+            const data = doc.data();
+
+
+            // Only accept valid coordinates
+            if (
+                data.name &&
+                typeof data.latitude === "number" &&
+                typeof data.longitude === "number"
+            ) {
+
+                verifiedShelters.push({
+
+                    id: doc.id,
+
+                    name: data.name,
+
+                    state: data.state || "",
+
+                    district: data.district || "",
+
+                    latitude: data.latitude,
+
+                    longitude: data.longitude,
+
+                    available:
+                        data.available === true
+
+                });
+
+            }
+
+        });
+
+
+        console.log(
+            "Shelters loaded:",
+            verifiedShelters.length
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Shelter loading error:",
+            error
+        );
+
     }
-];
+
+}
+
+
+// Load shelters when website starts
+loadShelters();
 
 
 // =====================================
@@ -62,42 +123,68 @@ const verifiedShelters = [
 async function sendSOS() {
 
     const disasterType =
-        document.getElementById("disasterType").value;
+        document.getElementById(
+            "disasterType"
+        ).value;
+
 
     const severityElement =
-        document.getElementById("severity");
+        document.getElementById(
+            "severity"
+        );
+
 
     const severity =
         severityElement
             ? severityElement.value
             : "Medium";
 
+
     const userName =
-        document.getElementById("userName").value;
+        document.getElementById(
+            "userName"
+        ).value;
+
 
     const location =
-        document.getElementById("location").value;
+        document.getElementById(
+            "location"
+        ).value;
+
 
     const contact =
-        document.getElementById("contact").value;
+        document.getElementById(
+            "contact"
+        ).value;
+
 
     const description =
-        document.getElementById("description").value;
+        document.getElementById(
+            "description"
+        ).value;
+
 
     const message =
-        document.getElementById("alertMessage");
+        document.getElementById(
+            "alertMessage"
+        );
+
 
     const historyList =
-        document.getElementById("historyList");
+        document.getElementById(
+            "historyList"
+        );
 
 
-    // =====================================
+    // =================================
     // VALIDATION
-    // =====================================
+    // =================================
 
     if (userName.trim() === "") {
 
-        alert("⚠️ Please enter your name!");
+        alert(
+            "⚠️ Please enter your name!"
+        );
 
         return;
     }
@@ -105,7 +192,9 @@ async function sendSOS() {
 
     if (location.trim() === "") {
 
-        alert("⚠️ Please get your current location!");
+        alert(
+            "⚠️ Please get your current location!"
+        );
 
         return;
     }
@@ -137,59 +226,76 @@ async function sendSOS() {
         now.toLocaleString();
 
 
-    // =====================================
-    // FIREBASE SAVE
-    // =====================================
+    // =================================
+    // SAVE SOS TO FIREBASE
+    // =================================
 
     try {
 
         await addDoc(
-            collection(db, "sos_requests"),
+            collection(
+                db,
+                "sos_requests"
+            ),
             {
 
-                userName: userName,
+                userName:
+                    userName,
 
-                disasterType: disasterType,
+                disasterType:
+                    disasterType,
 
-                severity: severity,
+                severity:
+                    severity,
 
-                location: location,
+                location:
+                    location,
 
-                contact: contact,
+                contact:
+                    contact,
 
-                description: description,
+                description:
+                    description,
 
-                status: "Pending",
+                status:
+                    "Pending",
 
-                dateTime: dateTime,
+                dateTime:
+                    dateTime,
 
-                createdAt: serverTimestamp()
+                createdAt:
+                    serverTimestamp()
 
             }
         );
 
 
-        // =====================================
+        // =================================
         // ALERT MESSAGE
-        // =====================================
+        // =================================
 
         if (message) {
 
             message.textContent =
                 "🚨 SOS REQUEST SENT! " +
-                "Name: " + userName +
-                " | Disaster: " + disasterType +
-                " | Severity: " + severity +
-                " | Location: " + location +
+                "Name: " +
+                userName +
+                " | Disaster: " +
+                disasterType +
+                " | Severity: " +
+                severity +
+                " | Location: " +
+                location +
                 " | Status: 🔴 Pending" +
-                " | Time: " + dateTime;
+                " | Time: " +
+                dateTime;
 
         }
 
 
-        // =====================================
+        // =================================
         // HISTORY
-        // =====================================
+        // =================================
 
         if (
             historyList &&
@@ -206,30 +312,40 @@ async function sendSOS() {
         if (historyList) {
 
             const historyItem =
-                document.createElement("li");
+                document.createElement(
+                    "li"
+                );
 
 
             const details =
-                document.createElement("p");
+                document.createElement(
+                    "p"
+                );
 
 
             details.textContent =
                 "🔴 Status: Pending" +
-                " | Name: " + userName +
-                " | Disaster: " + disasterType +
-                " | Severity: " + severity +
-                " | Location: " + location +
-                " | Contact: " + contact +
-                " | Description: " + description +
-                " | Time: " + dateTime;
+                " | Name: " +
+                userName +
+                " | Disaster: " +
+                disasterType +
+                " | Severity: " +
+                severity +
+                " | Location: " +
+                location +
+                " | Contact: " +
+                contact +
+                " | Description: " +
+                description +
+                " | Time: " +
+                dateTime;
 
 
-            // =================================
-            // PENDING
-            // =================================
-
+            // Pending button
             const pendingBtn =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
 
             pendingBtn.textContent =
@@ -237,7 +353,7 @@ async function sendSOS() {
 
 
             pendingBtn.onclick =
-                function () {
+                function() {
 
                     details.textContent =
                         details.textContent.replace(
@@ -248,12 +364,11 @@ async function sendSOS() {
                 };
 
 
-            // =================================
-            // IN PROGRESS
-            // =================================
-
+            // In Progress button
             const progressBtn =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
 
             progressBtn.textContent =
@@ -261,7 +376,7 @@ async function sendSOS() {
 
 
             progressBtn.onclick =
-                function () {
+                function() {
 
                     details.textContent =
                         details.textContent.replace(
@@ -272,12 +387,11 @@ async function sendSOS() {
                 };
 
 
-            // =================================
-            // RESOLVED
-            // =================================
-
+            // Resolved button
             const resolvedBtn =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
 
             resolvedBtn.textContent =
@@ -285,7 +399,7 @@ async function sendSOS() {
 
 
             resolvedBtn.onclick =
-                function () {
+                function() {
 
                     details.textContent =
                         details.textContent.replace(
@@ -296,15 +410,20 @@ async function sendSOS() {
                 };
 
 
-            historyItem.appendChild(details);
+            historyItem.appendChild(
+                details
+            );
+
 
             historyItem.appendChild(
                 pendingBtn
             );
 
+
             historyItem.appendChild(
                 progressBtn
             );
+
 
             historyItem.appendChild(
                 resolvedBtn
@@ -318,30 +437,35 @@ async function sendSOS() {
         }
 
 
-        // =====================================
-        // SUCCESS
-        // =====================================
+        // =================================
+        // SUCCESS MESSAGE
+        // =================================
 
         alert(
             "🆘 SOS Request Sent Successfully!\n\n" +
 
-            "Name: " + userName +
+            "Name: " +
+            userName +
 
-            "\nDisaster: " + disasterType +
+            "\nDisaster: " +
+            disasterType +
 
-            "\nSeverity: " + severity +
+            "\nSeverity: " +
+            severity +
 
-            "\nLocation: " + location +
+            "\nLocation: " +
+            location +
 
             "\nStatus: Pending" +
 
-            "\nTime: " + dateTime
+            "\nTime: " +
+            dateTime
         );
 
 
-        // =====================================
+        // =================================
         // CLEAR INPUTS
-        // =====================================
+        // =================================
 
         document.getElementById(
             "userName"
@@ -489,10 +613,7 @@ function getCurrentLocation() {
             }
 
 
-            // =================================
-            // FIND NEAREST VERIFIED SHELTER
-            // =================================
-
+            // Find nearest shelter
             showNearestShelter(
                 latitude,
                 longitude
@@ -521,11 +642,14 @@ function getCurrentLocation() {
 
         {
 
-            enableHighAccuracy: true,
+            enableHighAccuracy:
+                true,
 
-            timeout: 15000,
+            timeout:
+                15000,
 
-            maximumAge: 0
+            maximumAge:
+                0
 
         }
 
@@ -535,7 +659,7 @@ function getCurrentLocation() {
 
 
 // =====================================
-// 📏 DISTANCE
+// 📏 DISTANCE CALCULATION
 // =====================================
 
 function calculateDistance(
@@ -564,11 +688,13 @@ function calculateDistance(
         Math.sin(dLat / 2) +
 
         Math.cos(
-            lat1 * Math.PI / 180
+            lat1 *
+            Math.PI / 180
         ) *
 
         Math.cos(
-            lat2 * Math.PI / 180
+            lat2 *
+            Math.PI / 180
         ) *
 
         Math.sin(dLon / 2) *
@@ -597,8 +723,15 @@ function findNearestShelter(
     longitude
 ) {
 
+    const availableShelters =
+        verifiedShelters.filter(
+            shelter =>
+                shelter.available
+        );
+
+
     if (
-        verifiedShelters.length === 0
+        availableShelters.length === 0
     ) {
 
         return null;
@@ -612,7 +745,7 @@ function findNearestShelter(
         Infinity;
 
 
-    verifiedShelters.forEach(
+    availableShelters.forEach(
         function(shelter) {
 
             const distance =
@@ -698,9 +831,8 @@ function showNearestShelter(
                 </h3>
 
                 <p>
-                    ⚠️ Verified shelter
-                    location is not available
-                    for your area yet.
+                    ⚠️ No verified available
+                    shelter was found.
                 </p>
 
             </div>
@@ -736,7 +868,7 @@ function showNearestShelter(
             </p>
 
             <p>
-                ✅ Verified shelter
+                🟢 Available
             </p>
 
         </div>
@@ -753,11 +885,14 @@ function showNearestShelter(
 window.sendSOS =
     sendSOS;
 
+
 window.clearHistory =
     clearHistory;
 
+
 window.getCurrentLocation =
     getCurrentLocation;
+
 
 window.showNearestShelter =
     showNearestShelter;
