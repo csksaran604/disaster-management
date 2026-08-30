@@ -743,13 +743,17 @@ function getUserLocation(
             if (map) {
 
 
-                showNearestShelter(
+                const shelterSelect =
+    document.getElementById("shelterSelect");
 
-                    latitude,
+if (
+    shelterSelect &&
+    shelterSelect.value
+) {
 
-                    longitude
+    showSelectedShelter();
 
-                );
+}
 
             }
 
@@ -1972,8 +1976,7 @@ window.addEventListener(
         initializeMap();
 
 
-        addShelterMarkers();
-
+      
 
         console.log(
             "Smart Disaster Management loaded successfully."
